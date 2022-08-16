@@ -6,3 +6,7 @@
 
 # android
 *.apk
+
+*build/
+*.xmake/
+*.vs/
