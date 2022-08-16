@@ -47,7 +47,7 @@ target("flex-demo")
     if is_plat("windows") then
         add_links("SDL2","SDL2main","SDL2test")
     else
-        add_links("libSDL2","libSDL2_test","libSDL2main")
+        add_links("libSDL2","libSDL2main")
     end
 
     if is_plat("windows") then
