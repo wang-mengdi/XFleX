@@ -70,8 +70,8 @@ target("flex-demo")
     
 
     add_cugencodes("native","compute_61")
-    add_cuflags("-extended-lambda --std c++17")
+    add_cuflags("-extended-lambda --std c++17","-rdc=true")
     add_cuflags("-Xcompiler /bigobj")
-    add_ldflags("/subsystem:console")
+    --add_ldflags("/subsystem:console")
     add_packages("libsdl",{public=true})
     
