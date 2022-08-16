@@ -37,15 +37,11 @@
 #include "../core/convex.h"
 #include "../core/cloth.h"
 
-//#include "../external/SDL2-2.0.4/include/SDL.h"
-#include "SDL.h"
+#include "../external/SDL2-2.0.4/include/SDL.h"
 
 #include "../include/NvFlex.h"
 #include "../include/NvFlexExt.h"
 #include "../include/NvFlexDevice.h"
-//#include "NvFlex.h"
-//#include "NvFlexExt.h"
-//#include "NvFlexDevice.h"
 
 #include <iostream>
 #include <map>
@@ -60,7 +56,7 @@
 #endif
 
 #if ENABLE_AFTERMATH_SUPPORT
-#include "../external/GFSDK_Aftermath_v1.21/include/GFSDK_Aftermath.h"
+#include <external/GFSDK_Aftermath_v1.21/include/GFSDK_Aftermath.h>
 #endif
 
 SDL_Window* g_window;			// window handle
@@ -73,20 +69,20 @@ int GetKeyFromGameControllerButton(SDL_GameControllerButton button)
 {
 	switch (button)
 	{
-	case SDL_CONTROLLER_BUTTON_DPAD_UP:			{	return SDLK_q;		} // -- camera translate up
-	case SDL_CONTROLLER_BUTTON_DPAD_DOWN:		{	return SDLK_z;		} // -- camera translate down
-	case SDL_CONTROLLER_BUTTON_DPAD_LEFT:		{	return SDLK_h;		} // -- hide GUI
-	case SDL_CONTROLLER_BUTTON_DPAD_RIGHT:		{	return -1;			} // -- unassigned
-	case SDL_CONTROLLER_BUTTON_START:			{	return SDLK_RETURN;	} // -- start selected scene
-	case SDL_CONTROLLER_BUTTON_BACK:			{	return SDLK_ESCAPE;	} // -- quit
-	case SDL_CONTROLLER_BUTTON_LEFTSHOULDER:	{	return SDLK_UP;		} // -- select prev scene
-	case SDL_CONTROLLER_BUTTON_RIGHTSHOULDER:	{	return SDLK_DOWN;	} // -- select next scene
-	case SDL_CONTROLLER_BUTTON_A:				{	return SDLK_g;		} // -- toggle gravity
-	case SDL_CONTROLLER_BUTTON_B:				{	return SDLK_p;		} // -- pause
-	case SDL_CONTROLLER_BUTTON_X:				{	return SDLK_r;		} // -- reset
-	case SDL_CONTROLLER_BUTTON_Y:				{	return SDLK_o;		} // -- step sim
-	case SDL_CONTROLLER_BUTTON_RIGHT_TRIGGER:	{	return SDLK_SPACE;	} // -- emit particles
-	default:									{	return -1;			} // -- nop
+	case SDL_CONTROLLER_BUTTON_DPAD_UP: {	return SDLK_q;		} // -- camera translate up
+	case SDL_CONTROLLER_BUTTON_DPAD_DOWN: {	return SDLK_z;		} // -- camera translate down
+	case SDL_CONTROLLER_BUTTON_DPAD_LEFT: {	return SDLK_h;		} // -- hide GUI
+	case SDL_CONTROLLER_BUTTON_DPAD_RIGHT: {	return -1;			} // -- unassigned
+	case SDL_CONTROLLER_BUTTON_START: {	return SDLK_RETURN;	} // -- start selected scene
+	case SDL_CONTROLLER_BUTTON_BACK: {	return SDLK_ESCAPE;	} // -- quit
+	case SDL_CONTROLLER_BUTTON_LEFTSHOULDER: {	return SDLK_UP;		} // -- select prev scene
+	case SDL_CONTROLLER_BUTTON_RIGHTSHOULDER: {	return SDLK_DOWN;	} // -- select next scene
+	case SDL_CONTROLLER_BUTTON_A: {	return SDLK_g;		} // -- toggle gravity
+	case SDL_CONTROLLER_BUTTON_B: {	return SDLK_p;		} // -- pause
+	case SDL_CONTROLLER_BUTTON_X: {	return SDLK_r;		} // -- reset
+	case SDL_CONTROLLER_BUTTON_Y: {	return SDLK_o;		} // -- step sim
+	case SDL_CONTROLLER_BUTTON_RIGHT_TRIGGER: {	return SDLK_SPACE;	} // -- emit particles
+	default: {	return -1;			} // -- nop
 	};
 };
 
@@ -130,7 +126,7 @@ bool g_extensions = true;
 bool g_teamCity = false;
 bool g_interop = true;
 bool g_d3d12 = false;
-bool g_useAsyncCompute = true;		
+bool g_useAsyncCompute = true;
 bool g_increaseGfxLoadForAsyncComputeTesting = false;
 int g_graphics = 0;	// 0=ogl, 1=DX11, 2=DX12
 
@@ -144,7 +140,7 @@ NvFlexLibrary* g_flexLib;
 NvFlexParams g_params;
 NvFlexTimers g_timers;
 int g_numDetailTimers;
-NvFlexDetailTimer * g_detailTimers;
+NvFlexDetailTimer* g_detailTimers;
 
 int g_maxDiffuseParticles;
 int g_maxNeighborsPerParticle;
@@ -239,7 +235,7 @@ struct SimBuffers
 		anisotropy1(l), anisotropy2(l), anisotropy3(l), normals(l), smoothPositions(l),
 		diffusePositions(l), diffuseVelocities(l), diffuseCount(l), activeIndices(l),
 		shapeGeometry(l), shapePositions(l), shapeRotations(l), shapePrevPositions(l),
-		shapePrevRotations(l),	shapeFlags(l), rigidOffsets(l), rigidIndices(l), rigidMeshSize(l),
+		shapePrevRotations(l), shapeFlags(l), rigidOffsets(l), rigidIndices(l), rigidMeshSize(l),
 		rigidCoefficients(l), rigidPlasticThresholds(l), rigidPlasticCreeps(l), rigidRotations(l), rigidTranslations(l),
 		rigidLocalPositions(l), rigidLocalNormals(l), inflatableTriOffsets(l),
 		inflatableTriCounts(l), inflatableVolumes(l), inflatableCoefficients(l),
@@ -494,7 +490,7 @@ float g_realdt;				// the real world time delta between updates
 float g_waitTime;		// the CPU time spent waiting for the GPU
 float g_updateTime;     // the CPU time spent on Flex
 float g_renderTime;		// the CPU time spent calling OpenGL to render the scene
-                        // the above times don't include waiting for vsync
+						// the above times don't include waiting for vsync
 float g_simLatency;     // the time the GPU spent between the first and last NvFlexUpdateSolver() operation. Because some GPUs context switch, this can include graphics time.
 
 int g_scene = 0;
@@ -538,7 +534,7 @@ vector<Scene*> g_scenes;
 
 struct Emitter
 {
-	Emitter() : mSpeed(0.0f), mEnabled(false), mLeftOver(0.0f), mWidth(8)   {}
+	Emitter() : mSpeed(0.0f), mEnabled(false), mLeftOver(0.0f), mWidth(8) {}
 
 	Vec3 mPos;
 	Vec3 mDir;
@@ -558,7 +554,7 @@ struct Rope
 
 vector<Rope> g_ropes;
 
-inline float sqr(float x) { return x*x; }
+inline float sqr(float x) { return x * x; }
 
 #include "helpers.h"
 #include "scenes.h"
@@ -780,8 +776,8 @@ void Init(int scene, bool centerCamera = true)
 	EndGpuWork();
 
 	uint32_t numParticles = g_buffers->positions.size();
-	uint32_t maxParticles = numParticles + g_numExtraParticles*g_numExtraMultiplier;
-	
+	uint32_t maxParticles = numParticles + g_numExtraParticles * g_numExtraMultiplier;
+
 	if (g_params.solidRestDistance == 0.0f)
 		g_params.solidRestDistance = g_params.radius;
 
@@ -791,15 +787,15 @@ void Init(int scene, bool centerCamera = true)
 
 	// set collision distance automatically based on rest distance if not alraedy set
 	if (g_params.collisionDistance == 0.0f)
-		g_params.collisionDistance = Max(g_params.solidRestDistance, g_params.fluidRestDistance)*0.5f;
+		g_params.collisionDistance = Max(g_params.solidRestDistance, g_params.fluidRestDistance) * 0.5f;
 
 	// default particle friction to 10% of shape friction
 	if (g_params.particleFriction == 0.0f)
-		g_params.particleFriction = g_params.dynamicFriction*0.1f;
+		g_params.particleFriction = g_params.dynamicFriction * 0.1f;
 
 	// add a margin for detecting contacts between particles and shapes
 	if (g_params.shapeCollisionMargin == 0.0f)
-		g_params.shapeCollisionMargin = g_params.collisionDistance*0.5f;
+		g_params.shapeCollisionMargin = g_params.collisionDistance * 0.5f;
 
 	// calculate particle bounds
 	Vec3 particleLower, particleUpper;
@@ -811,7 +807,7 @@ void Init(int scene, bool centerCamera = true)
 
 	// update bounds
 	g_sceneLower = Min(Min(g_sceneLower, particleLower), shapeLower);
-	g_sceneUpper = Max(Max(g_sceneUpper, particleUpper), shapeUpper); 
+	g_sceneUpper = Max(Max(g_sceneUpper, particleUpper), shapeUpper);
 
 	g_sceneLower -= g_params.collisionDistance;
 	g_sceneUpper += g_params.collisionDistance;
@@ -881,7 +877,7 @@ void Init(int scene, bool centerCamera = true)
 	// center camera on particles
 	if (centerCamera)
 	{
-		g_camPos = Vec3((g_sceneLower.x + g_sceneUpper.x)*0.5f, min(g_sceneUpper.y*1.25f, 6.0f), g_sceneUpper.z + min(g_sceneUpper.y, 6.0f)*2.0f);
+		g_camPos = Vec3((g_sceneLower.x + g_sceneUpper.x) * 0.5f, min(g_sceneUpper.y * 1.25f, 6.0f), g_sceneUpper.z + min(g_sceneUpper.y, 6.0f) * 2.0f);
 		g_camAngle = Vec3(0.0f, -DegToRad(15.0f), 0.0f);
 
 		// give scene a chance to modify camera position
@@ -917,7 +913,7 @@ void Init(int scene, bool centerCamera = true)
 
 		// If the centers of mass for the rigids are not yet computed, this is done here
 		// (If the CreateParticleShape method is used instead of the NvFlexExt methods, the centers of mass will be calculated here)
-		if (g_buffers->rigidTranslations.size() == 0) 
+		if (g_buffers->rigidTranslations.size() == 0)
 		{
 			g_buffers->rigidTranslations.resize(g_buffers->rigidOffsets.size() - 1, Vec3());
 			CalculateRigidCentersOfMass(&g_buffers->positions[0], g_buffers->positions.size(), &g_buffers->rigidOffsets[0], &g_buffers->rigidTranslations[0], &g_buffers->rigidIndices[0], numRigids);
@@ -951,7 +947,7 @@ void Init(int scene, bool centerCamera = true)
 
 	NvFlexSetActive(g_solver, g_buffers->activeIndices.buffer, &copyDesc);
 	NvFlexSetActiveCount(g_solver, numParticles);
-	
+
 	// springs
 	if (g_buffers->springIndices.size())
 	{
@@ -1069,12 +1065,12 @@ void UpdateEmitters()
 {
 	float spin = DegToRad(15.0f);
 
-	const Vec3 forward(-sinf(g_camAngle.x + spin)*cosf(g_camAngle.y), sinf(g_camAngle.y), -cosf(g_camAngle.x + spin)*cosf(g_camAngle.y));
+	const Vec3 forward(-sinf(g_camAngle.x + spin) * cosf(g_camAngle.y), sinf(g_camAngle.y), -cosf(g_camAngle.x + spin) * cosf(g_camAngle.y));
 	const Vec3 right(Normalize(Cross(forward, Vec3(0.0f, 1.0f, 0.0f))));
 
 	g_emitters[0].mDir = Normalize(forward + Vec3(0.0, 0.4f, 0.0f));
 	g_emitters[0].mRight = right;
-	g_emitters[0].mPos = g_camPos + forward*1.f + Vec3(0.0f, 0.2f, 0.0f) + right*0.65f;
+	g_emitters[0].mPos = g_camPos + forward * 1.f + Vec3(0.0f, 0.2f, 0.0f) + right * 0.65f;
 
 	// process emitters
 	if (g_emit)
@@ -1100,7 +1096,7 @@ void UpdateEmitters()
 			float r = g_params.fluidRestDistance;
 			int phase = NvFlexMakePhase(0, eNvFlexPhaseSelfCollide | eNvFlexPhaseFluid);
 
-			float numParticles = (g_emitters[e].mSpeed / r)*g_dt;
+			float numParticles = (g_emitters[e].mSpeed / r) * g_dt;
 
 			// whole number to emit
 			int n = int(numParticles + g_emitters[e].mLeftOver);
@@ -1114,21 +1110,21 @@ void UpdateEmitters()
 			for (int k = 0; k < n; ++k)
 			{
 				int emitterWidth = g_emitters[e].mWidth;
-				int numParticles = emitterWidth*emitterWidth;
+				int numParticles = emitterWidth * emitterWidth;
 				for (int i = 0; i < numParticles; ++i)
 				{
-					float x = float(i%emitterWidth) - float(emitterWidth/2);
-					float y = float((i / emitterWidth) % emitterWidth) - float(emitterWidth/2);
+					float x = float(i % emitterWidth) - float(emitterWidth / 2);
+					float y = float((i / emitterWidth) % emitterWidth) - float(emitterWidth / 2);
 
-					if ((sqr(x) + sqr(y)) <= (emitterWidth / 2)*(emitterWidth / 2))
+					if ((sqr(x) + sqr(y)) <= (emitterWidth / 2) * (emitterWidth / 2))
 					{
 						Vec3 up = Normalize(Cross(emitterDir, emitterRight));
-						Vec3 offset = r*(emitterRight*x + up*y) + float(k)*emitterDir*r;
+						Vec3 offset = r * (emitterRight * x + up * y) + float(k) * emitterDir * r;
 
 						if (activeCount < g_buffers->positions.size())
 						{
 							g_buffers->positions[activeCount] = Vec4(emitterPos + offset, 1.0f);
-							g_buffers->velocities[activeCount] = emitterDir*g_emitters[e].mSpeed;
+							g_buffers->velocities[activeCount] = emitterDir * g_emitters[e].mSpeed;
 							g_buffers->phases[activeCount] = phase;
 
 							g_buffers->activeIndices.push_back(activeCount);
@@ -1144,11 +1140,11 @@ void UpdateEmitters()
 
 void UpdateCamera()
 {
-	Vec3 forward(-sinf(g_camAngle.x)*cosf(g_camAngle.y), sinf(g_camAngle.y), -cosf(g_camAngle.x)*cosf(g_camAngle.y));
+	Vec3 forward(-sinf(g_camAngle.x) * cosf(g_camAngle.y), sinf(g_camAngle.y), -cosf(g_camAngle.x) * cosf(g_camAngle.y));
 	Vec3 right(Normalize(Cross(forward, Vec3(0.0f, 1.0f, 0.0f))));
 
 	g_camSmoothVel = Lerp(g_camSmoothVel, g_camVel, 0.1f);
-	g_camPos += (forward*g_camSmoothVel.z + right*g_camSmoothVel.x + Cross(right, forward)*g_camSmoothVel.y);
+	g_camPos += (forward * g_camSmoothVel.z + right * g_camSmoothVel.x + Cross(right, forward) * g_camSmoothVel.y);
 }
 
 void UpdateMouse()
@@ -1176,13 +1172,13 @@ void UpdateMouse()
 
 		const int numActive = NvFlexGetActiveCount(g_solver);
 
-		g_mouseParticle = PickParticle(origin, dir, &g_buffers->positions[0], &g_buffers->phases[0], numActive, g_params.radius*0.8f, g_mouseT);
+		g_mouseParticle = PickParticle(origin, dir, &g_buffers->positions[0], &g_buffers->phases[0], numActive, g_params.radius * 0.8f, g_mouseT);
 
 		if (g_mouseParticle != -1)
 		{
 			printf("picked: %d, mass: %f v: %f %f %f\n", g_mouseParticle, g_buffers->positions[g_mouseParticle].w, g_buffers->velocities[g_mouseParticle].x, g_buffers->velocities[g_mouseParticle].y, g_buffers->velocities[g_mouseParticle].z);
 
-			g_mousePos = origin + dir*g_mouseT;
+			g_mousePos = origin + dir * g_mouseT;
 			g_mouseMass = g_buffers->positions[g_mouseParticle].w;
 			g_buffers->positions[g_mouseParticle].w = 0.0f;		// increase picked particle's mass to force it towards the point
 		}
@@ -1211,8 +1207,8 @@ void UpdateWind()
 	g_windTime += g_dt;
 
 	const Vec3 kWindDir = Vec3(3.0f, 15.0f, 0.0f);
-	const float kNoise = Perlin1D(g_windTime*g_windFrequency, 10, 0.25f);
-	Vec3 wind = g_windStrength*kWindDir*Vec3(kNoise, fabsf(kNoise), 0.0f);
+	const float kNoise = Perlin1D(g_windTime * g_windFrequency, 10, 0.25f);
+	Vec3 wind = g_windStrength * kWindDir * Vec3(kNoise, fabsf(kNoise), 0.0f);
 
 	g_params.wind[0] = wind.x;
 	g_params.wind[1] = wind.y;
@@ -1222,7 +1218,7 @@ void UpdateWind()
 	{
 		g_waveTime += g_dt;
 
-		g_params.planes[2][3] = g_wavePlane + (sinf(float(g_waveTime)*g_waveFrequency - kPi*0.5f)*0.5f + 0.5f)*g_waveAmplitude;
+		g_params.planes[2][3] = g_wavePlane + (sinf(float(g_waveTime) * g_waveFrequency - kPi * 0.5f) * 0.5f + 0.5f) * g_waveAmplitude;
 	}
 }
 
@@ -1288,7 +1284,7 @@ void RenderScene()
 
 	// GPU Render time doesn't include CPU->GPU copy time
 	GraphicsTimerBegin();
-	
+
 	if (numDiffuse)
 	{
 		if (g_interop)
@@ -1305,7 +1301,7 @@ void RenderScene()
 				numDiffuse);
 		}
 	}
-	
+
 	//---------------------------------------
 	// setup view and state
 
@@ -1313,7 +1309,7 @@ void RenderScene()
 	float aspect = float(g_screenWidth) / g_screenHeight;
 
 	Matrix44 proj = ProjectionMatrix(RadToDeg(fov), aspect, g_camNear, g_camFar);
-	Matrix44 view = RotationMatrix(-g_camAngle.x, Vec3(0.0f, 1.0f, 0.0f))*RotationMatrix(-g_camAngle.y, Vec3(cosf(-g_camAngle.x), 0.0f, sinf(-g_camAngle.x)))*TranslationMatrix(-Point3(g_camPos));
+	Matrix44 view = RotationMatrix(-g_camAngle.x, Vec3(0.0f, 1.0f, 0.0f)) * RotationMatrix(-g_camAngle.y, Vec3(cosf(-g_camAngle.x), 0.0f, sinf(-g_camAngle.x))) * TranslationMatrix(-Point3(g_camPos));
 
 	//------------------------------------
 	// lighting pass
@@ -1323,24 +1319,24 @@ void RenderScene()
 	g_sceneUpper = Max(g_sceneUpper, Vec3(2.0f, 2.0f, 2.0f));
 
 	Vec3 sceneExtents = g_sceneUpper - g_sceneLower;
-	Vec3 sceneCenter = 0.5f*(g_sceneUpper + g_sceneLower);
+	Vec3 sceneCenter = 0.5f * (g_sceneUpper + g_sceneLower);
 
 	g_lightDir = Normalize(Vec3(5.0f, 15.0f, 7.5f));
-	g_lightPos = sceneCenter + g_lightDir*Length(sceneExtents)*g_lightDistance;
+	g_lightPos = sceneCenter + g_lightDir * Length(sceneExtents) * g_lightDistance;
 	g_lightTarget = sceneCenter;
 
 	// calculate tight bounds for shadow frustum
-	float lightFov = 2.0f*atanf(Length(g_sceneUpper - sceneCenter) / Length(g_lightPos - sceneCenter));
+	float lightFov = 2.0f * atanf(Length(g_sceneUpper - sceneCenter) / Length(g_lightPos - sceneCenter));
 
 	// scale and clamp fov for aesthetics
 	lightFov = Clamp(lightFov, DegToRad(25.0f), DegToRad(65.0f));
 
 	Matrix44 lightPerspective = ProjectionMatrix(RadToDeg(lightFov), 1.0f, 1.0f, 1000.0f);
 	Matrix44 lightView = LookAtMatrix(Point3(g_lightPos), Point3(g_lightTarget));
-	Matrix44 lightTransform = lightPerspective*lightView;
+	Matrix44 lightTransform = lightPerspective * lightView;
 
 	// radius used for drawing
-	float radius = Max(g_params.solidRestDistance, g_params.fluidRestDistance)*0.5f*g_pointScale;
+	float radius = Max(g_params.solidRestDistance, g_params.fluidRestDistance) * 0.5f * g_pointScale;
 
 	//-------------------------------------
 	// shadowing pass 
@@ -1370,7 +1366,7 @@ void RenderScene()
 	if (g_drawRopes)
 	{
 		for (size_t i = 0; i < g_ropes.size(); ++i)
-			DrawRope(&g_buffers->positions[0], &g_ropes[i].mIndices[0], g_ropes[i].mIndices.size(), radius*g_ropeScale, i);
+			DrawRope(&g_buffers->positions[0], &g_ropes[i].mIndices[0], g_ropes[i].mIndices.size(), radius * g_ropeScale, i);
 	}
 
 	int shadowParticles = numParticles;
@@ -1428,7 +1424,7 @@ void RenderScene()
 		if (g_drawRopes)
 		{
 			for (size_t i = 0; i < g_ropes.size(); ++i)
-				DrawRope(&g_buffers->positions[0], &g_ropes[i].mIndices[0], g_ropes[i].mIndices.size(), g_params.radius*0.5f*g_ropeScale, i);
+				DrawRope(&g_buffers->positions[0], &g_ropes[i].mIndices[0], g_ropes[i].mIndices.size(), g_params.radius * 0.5f * g_ropeScale, i);
 		}
 
 		// give scene a chance to do custom drawing
@@ -1439,7 +1435,7 @@ void RenderScene()
 
 	// first pass of diffuse particles (behind fluid surface)
 	if (g_drawDiffuse)
-		RenderDiffuse(g_fluidRenderer, g_diffuseRenderBuffers, numDiffuse, radius*g_diffuseScale, float(g_screenWidth), aspect, fov, g_diffuseColor, g_lightPos, g_lightTarget, lightTransform, g_shadowMap, g_diffuseMotionScale, g_diffuseInscatter, g_diffuseOutscatter, g_diffuseShadow, false);
+		RenderDiffuse(g_fluidRenderer, g_diffuseRenderBuffers, numDiffuse, radius * g_diffuseScale, float(g_screenWidth), aspect, fov, g_diffuseColor, g_lightPos, g_lightTarget, lightTransform, g_shadowMap, g_diffuseMotionScale, g_diffuseInscatter, g_diffuseOutscatter, g_diffuseShadow, false);
 
 	if (g_drawEllipsoids)
 	{
@@ -1452,7 +1448,7 @@ void RenderScene()
 
 		// second pass of diffuse particles for particles in front of fluid surface
 		if (g_drawDiffuse)
-			RenderDiffuse(g_fluidRenderer, g_diffuseRenderBuffers, numDiffuse, radius*g_diffuseScale, float(g_screenWidth), aspect, fov, g_diffuseColor, g_lightPos, g_lightTarget, lightTransform, g_shadowMap, g_diffuseMotionScale, g_diffuseInscatter, g_diffuseOutscatter, g_diffuseShadow, true);
+			RenderDiffuse(g_fluidRenderer, g_diffuseRenderBuffers, numDiffuse, radius * g_diffuseScale, float(g_screenWidth), aspect, fov, g_diffuseColor, g_lightPos, g_lightTarget, lightTransform, g_shadowMap, g_diffuseMotionScale, g_diffuseInscatter, g_diffuseOutscatter, g_diffuseShadow, true);
 	}
 	else
 	{
@@ -1520,8 +1516,8 @@ void RenderDebug()
 	{
 		const int maxContactsPerParticle = 6;
 
-		NvFlexVector<Vec4> contactPlanes(g_flexLib, g_buffers->positions.size()*maxContactsPerParticle);
-		NvFlexVector<Vec4> contactVelocities(g_flexLib, g_buffers->positions.size()*maxContactsPerParticle);
+		NvFlexVector<Vec4> contactPlanes(g_flexLib, g_buffers->positions.size() * maxContactsPerParticle);
+		NvFlexVector<Vec4> contactVelocities(g_flexLib, g_buffers->positions.size() * maxContactsPerParticle);
 		NvFlexVector<int> contactIndices(g_flexLib, g_buffers->positions.size());
 		NvFlexVector<unsigned int> contactCounts(g_flexLib, g_buffers->positions.size());
 
@@ -1544,17 +1540,17 @@ void RenderDebug()
 
 			for (unsigned int c = 0; c < count; ++c)
 			{
-				Vec4 plane = contactPlanes[contactIndex*maxContactsPerParticle + c];
+				Vec4 plane = contactPlanes[contactIndex * maxContactsPerParticle + c];
 
-				DrawLine(Vec3(g_buffers->positions[g_buffers->activeIndices[i]]), 
-						 Vec3(g_buffers->positions[g_buffers->activeIndices[i]]) + Vec3(plane)*scale,
-						 Vec4(0.0f, 1.0f, 0.0f, 0.0f));
+				DrawLine(Vec3(g_buffers->positions[g_buffers->activeIndices[i]]),
+					Vec3(g_buffers->positions[g_buffers->activeIndices[i]]) + Vec3(plane) * scale,
+					Vec4(0.0f, 1.0f, 0.0f, 0.0f));
 			}
 		}
 
 		EndLines();
 	}
-	
+
 	if (g_drawBases)
 	{
 		for (int i = 0; i < int(g_buffers->rigidRotations.size()); ++i)
@@ -1567,12 +1563,12 @@ void RenderDebug()
 			{
 				Vec3 color;
 				color[b] = 1.0f;
-			
+
 				Matrix33 frame(g_buffers->rigidRotations[i]);
 
 				DrawLine(Vec3(g_buffers->rigidTranslations[i]),
-						 Vec3(g_buffers->rigidTranslations[i] + frame.cols[b] * size),
-						 Vec4(color, 0.0f));
+					Vec3(g_buffers->rigidTranslations[i] + frame.cols[b] * size),
+					Vec4(color, 0.0f));
 			}
 
 			EndLines();
@@ -1588,8 +1584,8 @@ void RenderDebug()
 		for (int i = 0; i < g_buffers->normals.size(); ++i)
 		{
 			DrawLine(Vec3(g_buffers->positions[i]),
-					 Vec3(g_buffers->positions[i] - g_buffers->normals[i] * g_buffers->normals[i].w),
-					 Vec4(0.0f, 1.0f, 0.0f, 0.0f));
+				Vec3(g_buffers->positions[i] - g_buffers->normals[i] * g_buffers->normals[i].w),
+				Vec4(0.0f, 1.0f, 0.0f, 0.0f));
 		}
 
 		EndLines();
@@ -1603,7 +1599,7 @@ void DrawShapes()
 		const int flags = g_buffers->shapeFlags[i];
 
 		// unpack flags
-		int type = int(flags&eNvFlexShapeFlagTypeMask);
+		int type = int(flags & eNvFlexShapeFlagTypeMask);
 		//bool dynamic = int(flags&eNvFlexShapeFlagDynamic) > 0;
 
 		Vec3 color = Vec3(0.9f);
@@ -1612,7 +1608,7 @@ void DrawShapes()
 		{
 			color = Vec3(0.6f, 1.0, 0.6f);
 
-			SetFillMode(true);		
+			SetFillMode(true);
 		}
 
 		// render with prev positions to match particle update order
@@ -1626,7 +1622,7 @@ void DrawShapes()
 		{
 			Mesh* sphere = CreateSphere(20, 20, geo.sphere.radius);
 
-			Matrix44 xform = TranslationMatrix(Point3(position))*RotationMatrix(Quat(rotation));
+			Matrix44 xform = TranslationMatrix(Point3(position)) * RotationMatrix(Quat(rotation));
 			sphere->Transform(xform);
 
 			DrawMesh(sphere, Vec3(color));
@@ -1638,7 +1634,7 @@ void DrawShapes()
 			Mesh* capsule = CreateCapsule(10, 20, geo.capsule.radius, geo.capsule.halfHeight);
 
 			// transform to world space
-			Matrix44 xform = TranslationMatrix(Point3(position))*RotationMatrix(Quat(rotation))*RotationMatrix(DegToRad(-90.0f), Vec3(0.0f, 0.0f, 1.0f));
+			Matrix44 xform = TranslationMatrix(Point3(position)) * RotationMatrix(Quat(rotation)) * RotationMatrix(DegToRad(-90.0f), Vec3(0.0f, 0.0f, 1.0f));
 			capsule->Transform(xform);
 
 			DrawMesh(capsule, Vec3(color));
@@ -1649,11 +1645,11 @@ void DrawShapes()
 		{
 			Mesh* box = CreateCubeMesh();
 
-			Matrix44 xform = TranslationMatrix(Point3(position))*RotationMatrix(Quat(rotation))*ScaleMatrix(Vec3(geo.box.halfExtents)*2.0f);
+			Matrix44 xform = TranslationMatrix(Point3(position)) * RotationMatrix(Quat(rotation)) * ScaleMatrix(Vec3(geo.box.halfExtents) * 2.0f);
 			box->Transform(xform);
 
 			DrawMesh(box, Vec3(color));
-			delete box;			
+			delete box;
 		}
 		else if (type == eNvFlexShapeConvexMesh)
 		{
@@ -1663,7 +1659,7 @@ void DrawShapes()
 
 				if (m)
 				{
-					Matrix44 xform = TranslationMatrix(Point3(g_buffers->shapePositions[i]))*RotationMatrix(Quat(g_buffers->shapeRotations[i]))*ScaleMatrix(geo.convexMesh.scale);
+					Matrix44 xform = TranslationMatrix(Point3(g_buffers->shapePositions[i])) * RotationMatrix(Quat(g_buffers->shapeRotations[i])) * ScaleMatrix(geo.convexMesh.scale);
 					DrawGpuMesh(m, xform, Vec3(color));
 				}
 			}
@@ -1676,7 +1672,7 @@ void DrawShapes()
 
 				if (m)
 				{
-					Matrix44 xform = TranslationMatrix(Point3(position))*RotationMatrix(Quat(rotation))*ScaleMatrix(geo.triMesh.scale);
+					Matrix44 xform = TranslationMatrix(Point3(position)) * RotationMatrix(Quat(rotation)) * ScaleMatrix(geo.triMesh.scale);
 					DrawGpuMesh(m, xform, Vec3(color));
 				}
 			}
@@ -1689,7 +1685,7 @@ void DrawShapes()
 
 				if (m)
 				{
-					Matrix44 xform = TranslationMatrix(Point3(position))*RotationMatrix(Quat(rotation))*ScaleMatrix(geo.sdf.scale);
+					Matrix44 xform = TranslationMatrix(Point3(position)) * RotationMatrix(Quat(rotation)) * ScaleMatrix(geo.sdf.scale);
 					DrawGpuMesh(m, xform, Vec3(color));
 				}
 			}
@@ -1708,7 +1704,7 @@ int DoUI()
 
 	if (g_showHelp)
 	{
-		const int numParticles = NvFlexGetActiveCount(g_solver);		
+		const int numParticles = NvFlexGetActiveCount(g_solver);
 		const int numDiffuse = g_buffers->diffuseCount[0];
 
 		int x = g_screenWidth - 200;
@@ -1733,12 +1729,12 @@ int DoUI()
 
 			if (!g_ffmpeg)
 			{
-				DrawImguiString(x, y, Vec3(1.0f), IMGUI_ALIGN_RIGHT, "Frame Time: %.2fms", g_realdt*1000.0f); y -= fontHeight * 2;
+				DrawImguiString(x, y, Vec3(1.0f), IMGUI_ALIGN_RIGHT, "Frame Time: %.2fms", g_realdt * 1000.0f); y -= fontHeight * 2;
 
 				// If detailed profiling is enabled, then these timers will contain the overhead of the detail timers, so we won't display them.
 				if (!g_profile)
 				{
-					DrawImguiString(x, y, Vec3(1.0f), IMGUI_ALIGN_RIGHT, "Sim Time (CPU): %.2fms", g_updateTime*1000.0f); y -= fontHeight;
+					DrawImguiString(x, y, Vec3(1.0f), IMGUI_ALIGN_RIGHT, "Sim Time (CPU): %.2fms", g_updateTime * 1000.0f); y -= fontHeight;
 					DrawImguiString(x, y, Vec3(0.97f, 0.59f, 0.27f), IMGUI_ALIGN_RIGHT, "Sim Latency (GPU): %.2fms", g_simLatency); y -= fontHeight * 2;
 
 					BenchmarkUpdateGraph();
@@ -1859,8 +1855,8 @@ int DoUI()
 			// scene options
 			g_scenes[g_scene]->DoGui();
 
-		if (imguiButton("Reset Scene"))
-			g_resetScene = true;
+			if (imguiButton("Reset Scene"))
+				g_resetScene = true;
 
 			imguiSeparatorLine();
 
@@ -2102,7 +2098,7 @@ void UpdateFrame()
 		Vec3 origin, dir;
 		GetViewRay(g_lastx, g_screenHeight - g_lasty, origin, dir);
 
-		g_mousePos = origin + dir*g_mouseT;
+		g_mousePos = origin + dir * g_mouseT;
 	}
 
 	if (g_capture)
@@ -2110,11 +2106,11 @@ void UpdateFrame()
 		TgaImage img;
 		img.m_width = g_screenWidth;
 		img.m_height = g_screenHeight;
-		img.m_data = new uint32_t[g_screenWidth*g_screenHeight];
+		img.m_data = new uint32_t[g_screenWidth * g_screenHeight];
 
 		ReadFrame((int*)img.m_data, g_screenWidth, g_screenHeight);
 
-		fwrite(img.m_data, sizeof(uint32_t)*g_screenWidth*g_screenHeight, 1, g_ffmpeg);
+		fwrite(img.m_data, sizeof(uint32_t) * g_screenWidth * g_screenHeight, 1, g_ffmpeg);
 
 		delete[] img.m_data;
 	}
@@ -2248,7 +2244,7 @@ void DumpAftermathData()
 	GFSDK_Aftermath_Status statusOut;
 
 	NvFlexGetDataAftermath(g_flexLib, &dataOut, &statusOut);
-	wprintf(L"Last Aftermath event: %s\n", (wchar_t *)dataOut.markerData);
+	wprintf(L"Last Aftermath event: %s\n", (wchar_t*)dataOut.markerData);
 }
 #endif
 
@@ -2619,8 +2615,8 @@ void MouseMotionFunc(unsigned state, int x, int y)
 		const float kSensitivity = DegToRad(0.1f);
 		const float kMaxDelta = FLT_MAX;
 
-		g_camAngle.x -= Clamp(dx*kSensitivity, -kMaxDelta, kMaxDelta);
-		g_camAngle.y -= Clamp(dy*kSensitivity, -kMaxDelta, kMaxDelta);
+		g_camAngle.x -= Clamp(dx * kSensitivity, -kMaxDelta, kMaxDelta);
+		g_camAngle.y -= Clamp(dy * kSensitivity, -kMaxDelta, kMaxDelta);
 	}
 }
 
