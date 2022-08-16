@@ -44,11 +44,7 @@ target("flex-demo")
     add_includedirs("../external/SDL2-2.0.4/include",{public=true})
     add_headerfiles("(../external/SDL2-2.0.4/include/*.h)")
     add_linkdirs("../external/SDL2-2.0.4/lib/x64")
-    if is_plat("windows") then
-        add_links("SDL2","SDL2main","SDL2test")
-    else
-        add_links("libSDL2","libSDL2main")
-    end
+    add_links("SDL2","SDL2main")
 
     if is_plat("windows") then
         add_includedirs("../external/GFSDK_Aftermath_v1.21/include",{public=true})
@@ -61,11 +57,7 @@ target("flex-demo")
     add_includedirs("../include",{public=true})
     add_headerfiles("(../include/*.h)")
     --add_includedirs("../lib/win64",{public=true})
-    if is_plat("windows") then
-        add_links("NvFlexReleaseCUDA_x64","NvFlexExtReleaseCUDA_x64","NvFlexDeviceRelease_x64")
-    else
-        add_links("NvFlexReleaseCUDA_x64.a","NvFlexExtReleaseCUDA_x64.a","NvFlexDeviceRelease_x64.a")
-    end
+    add_links("NvFlexReleaseCUDA_x64","NvFlexExtReleaseCUDA_x64","NvFlexDeviceRelease_x64")
     add_linkdirs("../lib/win64","../lib/linux64")
     --add_linkdirs("../bin/win64")
     --add_files("../lib/win64/NvFlexReleaseCUDA_x64.lib","../lib/win64/NvFlexExtReleaseCUDA_x64.lib","../lib/win64/NvFlexDeviceRelease_x64.lib")
