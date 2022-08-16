@@ -11,3 +11,7 @@
 *.xmake/
 *.vs/
 *.deps
+
+bin/.build_cache/
+bin/.objs/
+bin/windows/
