@@ -43,14 +43,19 @@ target("flex-demo")
 
     add_includedirs("../external/SDL2-2.0.4/include",{public=true})
     add_headerfiles("(../external/SDL2-2.0.4/include/*.h)")
-    add_links("SDL2","SDL2main","SDL2test")
     add_linkdirs("../external/SDL2-2.0.4/lib/x64")
+    if is_plat("windows") then
+        add_links("SDL2","SDL2main","SDL2test")
+    else
+        add_links("libSDL2","libSDL2_test","libSDL2main")
+    end
 
-    add_includedirs("../external/GFSDK_Aftermath_v1.21/include",{public=true})
-    add_headerfiles("(../external/GFSDK_Aftermath_v1.21/include/*.h)")
-    --add_files("../external/GFSDK_Aftermath_v1.21/lib/x64/*.lib")
-    add_links("GFSDK_Aftermath_Lib.x64","GFSDK_Aftermath_Lib_UWP.x64")
-    add_linkdirs("../external/GFSDK_Aftermath_v1.21/lib/x64")
+    if is_plat("windows") then
+        add_includedirs("../external/GFSDK_Aftermath_v1.21/include",{public=true})
+        add_headerfiles("(../external/GFSDK_Aftermath_v1.21/include/*.h)")
+        add_links("GFSDK_Aftermath_Lib.x64","GFSDK_Aftermath_Lib_UWP.x64")
+        add_linkdirs("../external/GFSDK_Aftermath_v1.21/lib/x64")
+    end
 
 
     add_includedirs("../include",{public=true})
