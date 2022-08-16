@@ -1,6 +1,7 @@
 add_rules("mode.debug","mode.release")
 
 add_requires("libsdl =2.0.8")
+includes("../extensions/xmake.lua")
 
 target("flex-demo")
     add_rules("plugin.vsxmake.autoupdate")
@@ -71,3 +72,4 @@ target("flex-demo")
     add_cuflags("-Xcompiler /bigobj")
     add_ldflags("/subsystem:console")
     add_packages("libsdl",{public=true})
+    add_deps("flex-ext")
