@@ -2877,7 +2877,7 @@ int main(int argc, char* argv[])
 	g_scenes.push_back(new PotPourri("Pot Pourri"));
 
 	// soft body scenes
-	SoftBody::Instance octopus("../../../data/softs/octopus.obj");
+	SoftBody::Instance octopus("../../../../data/softs/octopus.obj");
 	octopus.mScale = Vec3(32.0f);
 	octopus.mClusterSpacing = 2.75f;
 	octopus.mClusterRadius = 3.0f;
@@ -2886,7 +2886,7 @@ int main(int argc, char* argv[])
 	SoftBody* softOctopusSceneNew = new SoftBody("Soft Octopus");
 	softOctopusSceneNew->AddStack(octopus, 1, 3, 1);
 
-	SoftBody::Instance rope("../../../data/rope.obj");
+	SoftBody::Instance rope("../../../../data/rope.obj");
 	rope.mScale = Vec3(50.0f);
 	rope.mClusterSpacing = 1.5f;
 	rope.mClusterRadius = 0.0f;
@@ -2894,7 +2894,7 @@ int main(int argc, char* argv[])
 	SoftBody* softRopeSceneNew = new SoftBody("Soft Rope");
 	softRopeSceneNew->AddInstance(rope);
 
-	SoftBody::Instance bowl("../../../data/bowl_high.ply");
+	SoftBody::Instance bowl("../../../../data/bowl_high.ply");
 	bowl.mScale = Vec3(10.0f);
 	bowl.mClusterSpacing = 2.0f;
 	bowl.mClusterRadius = 2.0f;
@@ -2902,7 +2902,7 @@ int main(int argc, char* argv[])
 	SoftBody* softBowlSceneNew = new SoftBody("Soft Bowl");
 	softBowlSceneNew->AddInstance(bowl);
 
-	SoftBody::Instance cloth("../../../data/box_ultra_high.ply");
+	SoftBody::Instance cloth("../../../../data/box_ultra_high.ply");
 	cloth.mScale = Vec3(20.0f, 0.2f, 20.0f);
 	cloth.mClusterSpacing = 1.0f;
 	cloth.mClusterRadius = 2.0f;
@@ -2915,7 +2915,7 @@ int main(int argc, char* argv[])
 	softClothSceneNew->mRadius = 0.05f;
 	softClothSceneNew->AddInstance(cloth);
 
-	SoftBody::Instance rod("../../../data/box_very_high.ply");
+	SoftBody::Instance rod("../../../../data/box_very_high.ply");
 	rod.mScale = Vec3(20.0f, 2.0f, 2.0f);
 	rod.mTranslation = Vec3(-0.3f, 1.0f, 0.0f);
 	rod.mClusterSpacing = 2.0f;
@@ -2924,7 +2924,7 @@ int main(int argc, char* argv[])
 	SoftBodyFixed* softRodSceneNew = new SoftBodyFixed("Soft Rod");
 	softRodSceneNew->AddStack(rod, 3);
 
-	SoftBody::Instance teapot("../../../data/teapot.ply");
+	SoftBody::Instance teapot("../../../../data/teapot.ply");
 	teapot.mScale = Vec3(25.0f);
 	teapot.mClusterSpacing = 3.0f;
 	teapot.mClusterRadius = 0.0f;
@@ -2932,14 +2932,14 @@ int main(int argc, char* argv[])
 	SoftBody* softTeapotSceneNew = new SoftBody("Soft Teapot");
 	softTeapotSceneNew->AddInstance(teapot);
 
-	SoftBody::Instance armadillo("../../../data/armadillo.ply");
+	SoftBody::Instance armadillo("../../../../data/armadillo.ply");
 	armadillo.mScale = Vec3(25.0f);
 	armadillo.mClusterSpacing = 3.0f;
 	armadillo.mClusterRadius = 0.0f;
 	SoftBody* softArmadilloSceneNew = new SoftBody("Soft Armadillo");
 	softArmadilloSceneNew->AddInstance(armadillo);
 
-	SoftBody::Instance softbunny("../../../data/bunny.ply");
+	SoftBody::Instance softbunny("../../../../data/bunny.ply");
 	softbunny.mScale = Vec3(20.0f);
 	softbunny.mClusterSpacing = 3.5f;
 	softbunny.mClusterRadius = 0.0f;
@@ -2948,7 +2948,7 @@ int main(int argc, char* argv[])
 	softBunnySceneNew->AddInstance(softbunny);
 
 	// plastic scenes
-	SoftBody::Instance plasticbunny("../../../data/bunny.ply");
+	SoftBody::Instance plasticbunny("../../../../data/bunny.ply");
 	plasticbunny.mScale = Vec3(10.0f);
 	plasticbunny.mClusterSpacing = 1.0f;
 	plasticbunny.mClusterRadius = 0.0f;
@@ -2961,7 +2961,7 @@ int main(int argc, char* argv[])
 	plasticBunniesSceneNew->mPlinth = true;
 	plasticBunniesSceneNew->AddStack(plasticbunny, 1, 10, 1, true);
 
-	SoftBody::Instance bunny1("../../../data/bunny.ply");
+	SoftBody::Instance bunny1("../../../../data/bunny.ply");
 	bunny1.mScale = Vec3(10.0f);
 	bunny1.mClusterSpacing = 1.0f;
 	bunny1.mClusterRadius = 0.0f;
@@ -2970,7 +2970,7 @@ int main(int argc, char* argv[])
 	bunny1.mClusterPlasticThreshold = 0.0015f;
 	bunny1.mClusterPlasticCreep = 0.15f;
 	bunny1.mTranslation[1] = 5.0f;
-	SoftBody::Instance bunny2("../../../data/bunny.ply");
+	SoftBody::Instance bunny2("../../../../data/bunny.ply");
 	bunny2.mScale = Vec3(10.0f);
 	bunny2.mClusterSpacing = 1.0f;
 	bunny2.mClusterRadius = 0.0f;
@@ -2985,7 +2985,7 @@ int main(int argc, char* argv[])
 	plasticComparisonScene->AddInstance(bunny2);
 	plasticComparisonScene->mPlinth = true;
 
-	SoftBody::Instance stackBox("../../../data/box_high.ply");
+	SoftBody::Instance stackBox("../../../../data/box_high.ply");
 	stackBox.mScale = Vec3(10.0f);
 	stackBox.mClusterSpacing = 1.5f;
 	stackBox.mClusterRadius = 0.0f;
@@ -2994,7 +2994,7 @@ int main(int argc, char* argv[])
 	stackBox.mClusterPlasticThreshold = 0.0015f;
 	stackBox.mClusterPlasticCreep = 0.25f;
 	stackBox.mTranslation[1] = 1.0f;
-	SoftBody::Instance stackSphere("../../../data/sphere.ply");
+	SoftBody::Instance stackSphere("../../../../data/sphere.ply");
 	stackSphere.mScale = Vec3(10.0f);
 	stackSphere.mClusterSpacing = 1.5f;
 	stackSphere.mClusterRadius = 0.0f;
