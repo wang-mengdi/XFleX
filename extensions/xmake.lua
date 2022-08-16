@@ -1,6 +1,5 @@
 add_rules("mode.debug","mode.release")
 
-set_languages("cxx11")
 target("flex-ext")
     add_rules("plugin.vsxmake.autoupdate")
     if is_plat("windows") then
@@ -18,5 +17,5 @@ target("flex-ext")
     
 
     add_cugencodes("native","compute_61")
-    add_cuflags("-extended-lambda --std c++11","-rdc=true")
+    add_cuflags("-extended-lambda","-rdc=true")
     add_cuflags("-Xcompiler /bigobj")
