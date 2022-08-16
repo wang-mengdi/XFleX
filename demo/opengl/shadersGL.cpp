@@ -32,7 +32,7 @@
 #include "../../core/platform.h"
 #include "../../core/extrude.h"
 
-#include "../../external/SDL2-2.0.4/include/SDL.h"
+#include "SDL.h"
 #include "../../external/glad/src/glad.c"
 
 #include "imguiRenderGL.h"

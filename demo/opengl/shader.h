@@ -34,7 +34,7 @@
 #define ENABLE_SIMPLE_FLUID 0
 
 #include "../../external/glad/include/glad/glad.h"
-#include "../../external/SDL2-2.0.4/include/SDL.h"
+#include "SDL.h"
 
 #pragma comment (lib, "opengl32.lib") /* link Microsoft OpenGL lib   */
 

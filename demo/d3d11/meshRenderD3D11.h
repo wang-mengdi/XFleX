@@ -15,7 +15,7 @@
 
 #include "appD3D11Ctx.h"
 
-#include "core/maths.h"
+#include "../../../core/maths.h"
 #include "../d3d/renderParamsD3D.h"
 
 #include <wrl.h>

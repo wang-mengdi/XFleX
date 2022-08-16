@@ -12,7 +12,7 @@
 
 #define NOMINMAX
 
-#include "core/maths.h"
+#include "../../../core/maths.h"
 #include <DirectXMath.h>
 
 #include "shaderCommonD3D.h"

@@ -1,5 +1,5 @@
-#include "core/maths.h"
-#include "core/extrude.h"
+#include "../../../core/maths.h"
+#include "../../../core/extrude.h"
 
 #include "shaders.h"
 

@@ -60,7 +60,7 @@
 #endif
 
 #if ENABLE_AFTERMATH_SUPPORT
-#include <external/GFSDK_Aftermath_v1.21/include/GFSDK_Aftermath.h>
+#include "../external/GFSDK_Aftermath_v1.21/include/GFSDK_Aftermath.h"
 #endif
 
 SDL_Window* g_window;			// window handle
