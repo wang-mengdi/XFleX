@@ -360,7 +360,8 @@ void CreateSkinning(const Vec3* vertices, int numVertices, const Vec3* clusters,
 			else
 			{
 				// weight falls off inversely with distance
-				weights[w] = 1.0f / (powf(distances[w], falloff) + 0.0001f);
+				//weights[w] = 1.0f / (powf(distances[w], falloff) + 0.0001f);
+				weights[w] = 1.0f / (pow(distances[w], falloff) + 0.0001f);
 			}
 
 			wSum += weights[w];
