@@ -59,6 +59,9 @@ target("flex-demo")
     --add_includedirs("../lib/win64",{public=true})
     add_links("NvFlexReleaseCUDA_x64","NvFlexExtReleaseCUDA_x64","NvFlexDeviceRelease_x64")
     add_linkdirs("../lib/win64","../lib/linux64")
+    if is_plat("linux")
+        add_files("../lib/linux64/*.a")
+    end
     --add_linkdirs("../bin/win64")
     --add_files("../lib/win64/NvFlexReleaseCUDA_x64.lib","../lib/win64/NvFlexExtReleaseCUDA_x64.lib","../lib/win64/NvFlexDeviceRelease_x64.lib")
     
