@@ -56,13 +56,15 @@ target("flex-demo")
         add_linkdirs("../external/GFSDK_Aftermath_v1.21/lib/x64")
     end
 
+    add_deps("flex-ext")
 
     add_includedirs("../include",{public=true})
     add_headerfiles("(../include/*.h)")
     --add_includedirs("../lib/win64",{public=true})
     add_linkdirs("../lib/win64","../lib/linux64")
+    add_links("NvFlexReleaseCUDA_x64","NvFlexDeviceRelease_x64")
     --add_links("NvFlexReleaseCUDA_x64","NvFlexExtReleaseCUDA_x64","NvFlexDeviceRelease_x64")
-    add_links("NvFlexReleaseCUDA_x64","NvFlexExtReleaseCUDA_x64")
+    --add_links("NvFlexReleaseCUDA_x64","NvFlexExtReleaseCUDA_x64")
     --add_linkdirs("../bin/win64")
     --add_files("../lib/win64/NvFlexReleaseCUDA_x64.lib","../lib/win64/NvFlexExtReleaseCUDA_x64.lib","../lib/win64/NvFlexDeviceRelease_x64.lib")
     
@@ -72,4 +74,4 @@ target("flex-demo")
     add_cuflags("-Xcompiler /bigobj")
     add_ldflags("/subsystem:console")
     add_packages("libsdl",{public=true})
-    add_deps("flex-ext")
+    
