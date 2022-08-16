@@ -7,5 +7,7 @@
 # android
 *.apk
 
-*.deps
 *build/
+*.xmake/
+*.vs/
+*.deps
