@@ -10,14 +10,14 @@
 
 // Stubs for unsupported renderers
 //#if PLATFORM_LINUX
-#ifdef __linux__
+//#ifdef __linux__
 DemoContext* CreateDemoContextD3D11() { assert(0); return 0; };
 DemoContext* CreateDemoContextD3D12() { assert(0); return 0; };
-#else
+//#else
 #if FLEX_DX
 DemoContext* CreateDemoContextOGL() { assert(0); return 0; };
 #endif
-#endif
+//#endif
 
 extern DemoContext* CreateDemoContextOGL();
 extern DemoContext* CreateDemoContextD3D11();
