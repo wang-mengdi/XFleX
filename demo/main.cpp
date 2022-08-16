@@ -60,8 +60,6 @@
 #include <external/GFSDK_Aftermath_v1.21/include/GFSDK_Aftermath.h>
 #endif
 
-float __powf_finite(float x, double y) { return powf(x, y); }
-
 SDL_Window* g_window;			// window handle
 unsigned int g_windowId;		// window id
 

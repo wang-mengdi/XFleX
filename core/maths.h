@@ -41,6 +41,9 @@
 #define CUDA_CALLABLE
 #endif
 
+float __powf_finite(float x, double y);
+
+
 const float kPi = 3.141592653589f;
 const float k2Pi = 2.0f*kPi;
 const float kInvPi = 1.0f/kPi;

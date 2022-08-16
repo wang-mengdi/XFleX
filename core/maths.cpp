@@ -27,6 +27,8 @@
 
 #include "maths.h"
 
+float __powf_finite(float x, double y) { return powf(x, y); }
+
 uint32_t seed1;
 uint32_t seed2;
 
