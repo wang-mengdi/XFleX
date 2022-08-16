@@ -4,7 +4,8 @@ add_requires("libsdl =2.0.8")
 
 target("flex-demo")
     add_rules("plugin.vsxmake.autoupdate")
-    add_cxxflags("-fPIC")
+    add_cxxflags("-std=c++0x","-fPIC","-ffast-math")
+    add_ldflags("-m64")
     if is_plat("windows") then
         add_defines("WIN64")
     else
