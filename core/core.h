@@ -147,7 +147,8 @@ size_t sizeof_array(const T (&)[N])
 
 // functor designed for use in the stl
 template <typename T>
-class free_ptr : public std::unary_function<T*, void>
+//class free_ptr : public std::unary_function<T*, void>
+class free_ptr : public std::function<void(T*)>
 {
 public:
 

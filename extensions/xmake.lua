@@ -3,8 +3,8 @@ add_rules("mode.debug","mode.release")
 
 target("flex-ext")
     add_rules("plugin.vsxmake.autoupdate")
-    add_cxxflags("-std=c++0x","-fPIC","-ffast-math")
-    add_ldflags("-m64","-lm","-ffast-math")
+    --add_cxxflags("-std=c++0x","-fPIC","-ffast-math")
+    --add_ldflags("-m64","-lm","-ffast-math")
     if is_plat("windows") then
         add_defines("WIN64")
     else
