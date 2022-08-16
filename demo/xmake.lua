@@ -14,11 +14,6 @@ target("flex-demo")
     add_includedirs("opengl",{public=true})
     add_headerfiles("(opengl/*.h)")
 
-    --add_includedirs("(../include)",{public=true})
-    add_headerfiles("(../include/*.h)")
-    --add_files("../lib/win64/*.lib")
-    add_files("../lib/win64/NvFlexReleaseCUDA_x64.lib","../lib/win64/NvFlexExtReleaseCUDA_x64.lib","../lib/win64/NvFlexDeviceRelease_x64.lib")
-
     add_includedirs("(../core)",{public=true})
     add_headerfiles("(../core/*.h)")
 
@@ -46,6 +41,11 @@ target("flex-demo")
     add_headerfiles("(../external/GFSDK_Aftermath_v1.21/include/*.h)")
     add_files("../external/GFSDK_Aftermath_v1.21/lib/x64/*.lib")
 
+
+    add_includedirs("(../include)",{public=true})
+    add_headerfiles("(../include/*.h)")
+    add_includedirs("(../lib/win64)",{public=true})
+    add_files("../lib/win64/NvFlexReleaseCUDA_x64.lib","../lib/win64/NvFlexExtReleaseCUDA_x64.lib","../lib/win64/NvFlexDeviceRelease_x64.lib")
     
 
     add_cugencodes("native","compute_61")
