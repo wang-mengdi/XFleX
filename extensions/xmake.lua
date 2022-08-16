@@ -18,5 +18,5 @@ target("flex-ext")
     
 
     add_cugencodes("native","compute_61")
-    add_cuflags("-extended-lambda --std c++17")
+    add_cuflags("-extended-lambda --std c++17","-rdc=true")
     add_cuflags("-Xcompiler /bigobj")
