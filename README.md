@@ -1,3 +1,9 @@
+# XFleX
+Using xmake to compile [FleX](https://github.com/NVIDIAGameWorks/FleX).
+
+Can compile in modern CUDA environment.
+
+
 NVIDIA Flex - 1.2.0
 ===================
 
@@ -26,23 +32,23 @@ To build the demo at least one of the following is required:
 * Microsoft Visual Studio 2015
 * g++ 4.6.3 or higher
 
-And either: 
+And either:
 
 * CUDA 9.2.148 toolkit
 * DirectX 11/12 SDK
 
-Demo 
+Demo
 ====
 
 Use the `run_cuda.bat` or `run_d3d.bat` files to launch the demo.
 
-Notes 
+Notes
 -----
 
 * Some scenes also have fluid emitters that can be started using 'space'
 * For running the Linux binaries you will need to export the path to where the CUDA run time libraries are
   For example, you may add to your .bashrc file the following:
-       
+
       export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/cuda/lib64
 
 
@@ -68,18 +74,18 @@ Controls
     p - Pause/Unpause
     o - Step
     h - Hide/Show onscreen help
-    
+
     left/right arrow keys - Move to prev/next scene
     up/down arrow keys - Select next scene
     enter - Launch selected scene
     r - Reset current scene
-    
+
     e - Draw fluid surface
     v - Draw points
     f - Draw springs
     i - Draw diffuse
     m - Draw meshes
-    
+
     space - Toggle fluid emitter
     y - Toggle wave pool
     c - Toggle video capture
@@ -102,4 +108,3 @@ Acknowledgements
 * Regal is licensed under the BSD license
 * stb_truetype by Sean Barrett is public domain
 * imgui by Mikko Mononen is licensed under the ZLib license
-
