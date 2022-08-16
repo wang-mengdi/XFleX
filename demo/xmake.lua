@@ -61,7 +61,11 @@ target("flex-demo")
     add_includedirs("../include",{public=true})
     add_headerfiles("(../include/*.h)")
     --add_includedirs("../lib/win64",{public=true})
-    add_links("NvFlexReleaseCUDA_x64","NvFlexExtReleaseCUDA_x64","NvFlexDeviceRelease_x64")
+    if is_plat("windows") then
+        add_links("NvFlexReleaseCUDA_x64","NvFlexExtReleaseCUDA_x64","NvFlexDeviceRelease_x64")
+    else
+        add_links("NvFlexReleaseCUDA_x64.a","NvFlexExtReleaseCUDA_x64.a","NvFlexDeviceRelease_x64.a")
+    end
     add_linkdirs("../lib/win64","../lib/linux64")
     --add_linkdirs("../bin/win64")
     --add_files("../lib/win64/NvFlexReleaseCUDA_x64.lib","../lib/win64/NvFlexExtReleaseCUDA_x64.lib","../lib/win64/NvFlexDeviceRelease_x64.lib")
