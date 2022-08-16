@@ -1,9 +1,10 @@
 add_rules("mode.debug","mode.release")
 
---add_requires("libsdl =2.0.8")
+add_requires("libsdl =2.0.8")
 
 target("flex-demo")
     add_rules("plugin.vsxmake.autoupdate")
+    add_cxxflags("-fPIC")
     if is_plat("windows") then
         add_defines("WIN64")
     else
@@ -41,10 +42,10 @@ target("flex-demo")
     --add_headerfiles("(d3d12/*.h)")
     --add_files("d3d12/*.cpp")
 
-    add_includedirs("../external/SDL2-2.0.4/include",{public=true})
-    add_headerfiles("(../external/SDL2-2.0.4/include/*.h)")
-    add_linkdirs("../external/SDL2-2.0.4/lib/x64")
-    add_links("SDL2","SDL2main")
+    --add_includedirs("../external/SDL2-2.0.4/include",{public=true})
+    --add_headerfiles("(../external/SDL2-2.0.4/include/*.h)")
+    --add_linkdirs("../external/SDL2-2.0.4/lib/x64")
+    --add_links("SDL2","SDL2main")
 
     if is_plat("windows") then
         add_includedirs("../external/GFSDK_Aftermath_v1.21/include",{public=true})
@@ -67,4 +68,4 @@ target("flex-demo")
     add_cuflags("-extended-lambda --std c++17")
     add_cuflags("-Xcompiler /bigobj")
     add_ldflags("/subsystem:console")
-    --add_packages("libsdl",{public=true})
+    add_packages("libsdl",{public=true})

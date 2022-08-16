@@ -37,7 +37,8 @@
 #include "../core/convex.h"
 #include "../core/cloth.h"
 
-#include "../external/SDL2-2.0.4/include/SDL.h"
+//#include "../external/SDL2-2.0.4/include/SDL.h"
+#include "SDL.h"
 
 #include "../include/NvFlex.h"
 #include "../include/NvFlexExt.h"
