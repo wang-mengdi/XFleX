@@ -2112,7 +2112,14 @@ void UpdateFrame()
 
 		ReadFrame((int*)img.m_data, g_screenWidth, g_screenHeight);
 
-		fwrite(img.m_data, sizeof(uint32_t) * g_screenWidth * g_screenHeight, 1, g_ffmpeg);
+		//FILE* out_file = fopen("captured.TGA", "wb");
+
+		//fwrite(img.m_data, sizeof(uint32_t) * g_screenWidth * g_screenHeight, 1, out_file);
+		//fclose(out_file);
+		
+		TgaSave("captured.TGA", img, false);
+		 
+		//fwrite(img.m_data, sizeof(uint32_t) * g_screenWidth * g_screenHeight, 1, g_ffmpeg);
 
 		delete[] img.m_data;
 	}
