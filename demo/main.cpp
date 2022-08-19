@@ -3105,56 +3105,11 @@ int main(int argc, char* argv[])
 
 #ifndef ANDROID
 	DemoContext* demoContext = nullptr;
-#if FLEX_DX
-	// Flex DX demo will always create the renderer using the same DX api as the flex lib
-	if (g_d3d12)
-	{
-		// workaround for a driver issue with D3D12 with msaa, force it to off
-		// options.numMsaaSamples = 1;
-		g_graphics = 2;
-	}
-	else
-	{
-		g_graphics = 1;
-	}
-#else
-	switch (g_graphics)
-	{
-	case 0: break;
-	case 1: break;
-	case 2:
-		// workaround for a driver issue with D3D12 with msaa, force it to off
-		// options.numMsaaSamples = 1;
-		// Currently interop doesn't work on d3d12
-		g_interop = false;
-		break;
-	default: assert(0);
-	}
-#endif
 	// Create the demo context
 	CreateDemoContext(g_graphics);
 
 	std::string str;
-#if FLEX_DX
-	if (g_d3d12)
-		str = "Flex Demo (Compute: DX12) ";
-	else
-		str = "Flex Demo (Compute: DX11) ";
-#else
-	str = "Flex Demo (Compute: CUDA) ";
-#endif
-	switch (g_graphics)
-	{
-	case 0:
-		str += "(Graphics: OpenGL)";
-		break;
-	case 1:
-		str += "(Graphics: DX11)";
-		break;
-	case 2:
-		str += "(Graphics: DX12)";
-		break;
-	}
+	str = "Flex Demo (Compute: CUDA) (Graphics: OpenGL)";
 	const char* title = str.c_str();
 
 	SDLInit(title);
@@ -3200,48 +3155,10 @@ int main(int argc, char* argv[])
 	desc.computeContext = 0;
 	desc.computeType = eNvFlexCUDA;
 
-#if FLEX_DX
-	if (g_d3d12)
-		desc.computeType = eNvFlexD3D12;
-	else
-		desc.computeType = eNvFlexD3D11;
-
-	bool userSpecifiedGpuToUseForFlex = (g_device != -1);
-
-	if (userSpecifiedGpuToUseForFlex)
-	{
-		// Flex doesn't currently support interop between different D3DDevices.
-		// If the user specifies which physical device to use, then Flex always 
-		// creates its own D3DDevice, even if graphics is on the same physical device.
-		// So specified physical device always means no interop.
-		g_interop = false;
-	}
-	else
-	{
-		// Ask Flex to run on the same GPU as rendering
-		GetRenderDevice(&desc.renderDevice,
-			&desc.renderContext);
-	}
-
 	// Shared resources are unimplemented on D3D12,
 	// so disable it for now.
 	if (g_d3d12)
 		g_interop = false;
-
-	// Setting runOnRenderContext = true doesn't prevent async compute, it just 
-	// makes Flex send compute and graphics to the GPU on the same queue.
-	//
-	// So to allow the user to toggle async compute, we set runOnRenderContext = false
-	// and provide a toggleable sync between compute and graphics in the app.
-	//
-	// Search for g_useAsyncCompute for details
-	desc.runOnRenderContext = false;
-#else
-	// Shared resources are unimplemented on D3D12,
-	// so disable it for now.
-	if (g_d3d12)
-		g_interop = false;
-#endif
 
 	// Init Flex library, note that no CUDA methods should be called before this 
 	// point to ensure we get the device context we want
