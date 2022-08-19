@@ -2102,7 +2102,8 @@ void UpdateFrame()
 		g_mousePos = origin + dir * g_mouseT;
 	}
 
-	if (g_capture)
+	//if (g_capture)
+	if(true)
 	{
 		TgaImage img;
 		img.m_width = g_screenWidth;
@@ -2775,6 +2776,42 @@ void SDLMainLoop()
 
 int main(int argc, char* argv[])
 {
+	if (!g_ffmpeg)
+	{
+		// open ffmpeg stream
+
+		int i = 0;
+		char buf[255];
+		FILE* f = NULL;
+
+		do
+		{
+			sprintf(buf, "../../../../movies/output%d.mp4", i);
+			f = fopen(buf, "rb");
+			if (f)
+				fclose(f);
+
+			++i;
+		} while (f);
+
+		const char* str = "ffmpeg -r 60 -f rawvideo -pix_fmt rgba -s 1280x720 -i - "
+			"-threads 0 -preset fast -y -crf 19 -pix_fmt yuv420p -tune animation -vf vflip %s";
+
+		char cmd[1024];
+		sprintf(cmd, str, buf);
+
+		g_ffmpeg = _popen(cmd, "wb");
+		assert(g_ffmpeg);
+	}
+	else
+	{
+		_pclose(g_ffmpeg);
+		g_ffmpeg = NULL;
+	}
+
+	g_capture = !g_capture;
+	g_frame = 0;
+
 	// process command line args
 	for (int i = 1; i < argc; ++i)
 	{
