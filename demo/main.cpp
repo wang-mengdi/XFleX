@@ -1955,84 +1955,84 @@ void UpdateFrame()
 	double currentTime = frameBeginTime;
 	static double lastJoyTime = currentTime;
 
-	if (g_gamecontroller && currentTime - lastJoyTime > g_dt)
-	{
-		lastJoyTime = currentTime;
+	//if (g_gamecontroller && currentTime - lastJoyTime > g_dt)
+	//{
+	//	lastJoyTime = currentTime;
 
-		int leftStickX = SDL_GameControllerGetAxis(g_gamecontroller, SDL_CONTROLLER_AXIS_LEFTX);
-		int leftStickY = SDL_GameControllerGetAxis(g_gamecontroller, SDL_CONTROLLER_AXIS_LEFTY);
-		int rightStickX = SDL_GameControllerGetAxis(g_gamecontroller, SDL_CONTROLLER_AXIS_RIGHTX);
-		int rightStickY = SDL_GameControllerGetAxis(g_gamecontroller, SDL_CONTROLLER_AXIS_RIGHTY);
-		int leftTrigger = SDL_GameControllerGetAxis(g_gamecontroller, SDL_CONTROLLER_AXIS_TRIGGERLEFT);
-		int rightTrigger = SDL_GameControllerGetAxis(g_gamecontroller, SDL_CONTROLLER_AXIS_TRIGGERRIGHT);
+	//	int leftStickX = SDL_GameControllerGetAxis(g_gamecontroller, SDL_CONTROLLER_AXIS_LEFTX);
+	//	int leftStickY = SDL_GameControllerGetAxis(g_gamecontroller, SDL_CONTROLLER_AXIS_LEFTY);
+	//	int rightStickX = SDL_GameControllerGetAxis(g_gamecontroller, SDL_CONTROLLER_AXIS_RIGHTX);
+	//	int rightStickY = SDL_GameControllerGetAxis(g_gamecontroller, SDL_CONTROLLER_AXIS_RIGHTY);
+	//	int leftTrigger = SDL_GameControllerGetAxis(g_gamecontroller, SDL_CONTROLLER_AXIS_TRIGGERLEFT);
+	//	int rightTrigger = SDL_GameControllerGetAxis(g_gamecontroller, SDL_CONTROLLER_AXIS_TRIGGERRIGHT);
 
-		Vec2 leftStick(joyAxisFilter(leftStickX, 0), joyAxisFilter(leftStickY, 0));
-		Vec2 rightStick(joyAxisFilter(rightStickX, 1), joyAxisFilter(rightStickY, 1));
-		Vec2 trigger(leftTrigger / 32768.0f, rightTrigger / 32768.0f);
+	//	Vec2 leftStick(joyAxisFilter(leftStickX, 0), joyAxisFilter(leftStickY, 0));
+	//	Vec2 rightStick(joyAxisFilter(rightStickX, 1), joyAxisFilter(rightStickY, 1));
+	//	Vec2 trigger(leftTrigger / 32768.0f, rightTrigger / 32768.0f);
 
-		if (leftStick.x != 0.0f || leftStick.y != 0.0f ||
-			rightStick.x != 0.0f || rightStick.y != 0.0f)
-		{
-			// note constant factor to speed up analog control compared to digital because it is more controllable.
-			g_camVel.z = -4 * g_camSpeed * leftStick.y;
-			g_camVel.x = 4 * g_camSpeed * leftStick.x;
+	//	if (leftStick.x != 0.0f || leftStick.y != 0.0f ||
+	//		rightStick.x != 0.0f || rightStick.y != 0.0f)
+	//	{
+	//		// note constant factor to speed up analog control compared to digital because it is more controllable.
+	//		g_camVel.z = -4 * g_camSpeed * leftStick.y;
+	//		g_camVel.x = 4 * g_camSpeed * leftStick.x;
 
-			// cam orientation
-			g_camAngle.x -= rightStick.x * 0.05f;
-			g_camAngle.y -= rightStick.y * 0.05f;
-		}
+	//		// cam orientation
+	//		g_camAngle.x -= rightStick.x * 0.05f;
+	//		g_camAngle.y -= rightStick.y * 0.05f;
+	//	}
 
-		// Handle left stick motion
-		static bool bLeftStick = false;
+	//	// Handle left stick motion
+	//	static bool bLeftStick = false;
 
-		if ((leftStick.x != 0.0f || leftStick.y != 0.0f) && !bLeftStick)
-		{
-			bLeftStick = true;
-		}
-		else if ((leftStick.x == 0.0f && leftStick.y == 0.0f) && bLeftStick)
-		{
-			bLeftStick = false;
-			g_camVel.z = -4 * g_camSpeed * leftStick.y;
-			g_camVel.x = 4 * g_camSpeed * leftStick.x;
-		}
+	//	if ((leftStick.x != 0.0f || leftStick.y != 0.0f) && !bLeftStick)
+	//	{
+	//		bLeftStick = true;
+	//	}
+	//	else if ((leftStick.x == 0.0f && leftStick.y == 0.0f) && bLeftStick)
+	//	{
+	//		bLeftStick = false;
+	//		g_camVel.z = -4 * g_camSpeed * leftStick.y;
+	//		g_camVel.x = 4 * g_camSpeed * leftStick.x;
+	//	}
 
-		// Handle triggers as controller button events
-		void ControllerButtonEvent(SDL_ControllerButtonEvent event);
+	//	// Handle triggers as controller button events
+	//	void ControllerButtonEvent(SDL_ControllerButtonEvent event);
 
-		static bool bLeftTrigger = false;
-		static bool bRightTrigger = false;
-		SDL_ControllerButtonEvent e;
+	//	static bool bLeftTrigger = false;
+	//	static bool bRightTrigger = false;
+	//	SDL_ControllerButtonEvent e;
 
-		if (!bLeftTrigger && trigger.x > 0.0f)
-		{
-			e.type = SDL_CONTROLLERBUTTONDOWN;
-			e.button = SDL_CONTROLLER_BUTTON_LEFT_TRIGGER;
-			ControllerButtonEvent(e);
-			bLeftTrigger = true;
-		}
-		else if (bLeftTrigger && trigger.x == 0.0f)
-		{
-			e.type = SDL_CONTROLLERBUTTONUP;
-			e.button = SDL_CONTROLLER_BUTTON_LEFT_TRIGGER;
-			ControllerButtonEvent(e);
-			bLeftTrigger = false;
-		}
+	//	if (!bLeftTrigger && trigger.x > 0.0f)
+	//	{
+	//		e.type = SDL_CONTROLLERBUTTONDOWN;
+	//		e.button = SDL_CONTROLLER_BUTTON_LEFT_TRIGGER;
+	//		ControllerButtonEvent(e);
+	//		bLeftTrigger = true;
+	//	}
+	//	else if (bLeftTrigger && trigger.x == 0.0f)
+	//	{
+	//		e.type = SDL_CONTROLLERBUTTONUP;
+	//		e.button = SDL_CONTROLLER_BUTTON_LEFT_TRIGGER;
+	//		ControllerButtonEvent(e);
+	//		bLeftTrigger = false;
+	//	}
 
-		if (!bRightTrigger && trigger.y > 0.0f)
-		{
-			e.type = SDL_CONTROLLERBUTTONDOWN;
-			e.button = SDL_CONTROLLER_BUTTON_RIGHT_TRIGGER;
-			ControllerButtonEvent(e);
-			bRightTrigger = true;
-		}
-		else if (bRightTrigger && trigger.y == 0.0f)
-		{
-			e.type = SDL_CONTROLLERBUTTONDOWN;
-			e.button = SDL_CONTROLLER_BUTTON_RIGHT_TRIGGER;
-			ControllerButtonEvent(e);
-			bRightTrigger = false;
-		}
-	}
+	//	if (!bRightTrigger && trigger.y > 0.0f)
+	//	{
+	//		e.type = SDL_CONTROLLERBUTTONDOWN;
+	//		e.button = SDL_CONTROLLER_BUTTON_RIGHT_TRIGGER;
+	//		ControllerButtonEvent(e);
+	//		bRightTrigger = true;
+	//	}
+	//	else if (bRightTrigger && trigger.y == 0.0f)
+	//	{
+	//		e.type = SDL_CONTROLLERBUTTONDOWN;
+	//		e.button = SDL_CONTROLLER_BUTTON_RIGHT_TRIGGER;
+	//		ControllerButtonEvent(e);
+	//		bRightTrigger = false;
+	//	}
+	//}
 
 	//-------------------------------------------------------------------
 	// Scene Update
