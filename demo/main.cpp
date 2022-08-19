@@ -2130,82 +2130,82 @@ void UpdateFrame()
 
 	double updateBeginTime = GetSeconds();
 
-	// send any particle updates to the solver
-	NvFlexSetParticles(g_solver, g_buffers->positions.buffer, NULL);
-	NvFlexSetVelocities(g_solver, g_buffers->velocities.buffer, NULL);
-	NvFlexSetPhases(g_solver, g_buffers->phases.buffer, NULL);
-	NvFlexSetActive(g_solver, g_buffers->activeIndices.buffer, NULL);
+	//// send any particle updates to the solver
+	//NvFlexSetParticles(g_solver, g_buffers->positions.buffer, NULL);
+	//NvFlexSetVelocities(g_solver, g_buffers->velocities.buffer, NULL);
+	//NvFlexSetPhases(g_solver, g_buffers->phases.buffer, NULL);
+	//NvFlexSetActive(g_solver, g_buffers->activeIndices.buffer, NULL);
 
-	NvFlexSetActiveCount(g_solver, g_buffers->activeIndices.size());
+	//NvFlexSetActiveCount(g_solver, g_buffers->activeIndices.size());
 
-	// allow scene to update constraints etc
-	SyncScene();
+	//// allow scene to update constraints etc
+	//SyncScene();
 
-	if (g_shapesChanged)
-	{
-		NvFlexSetShapes(
-			g_solver,
-			g_buffers->shapeGeometry.buffer,
-			g_buffers->shapePositions.buffer,
-			g_buffers->shapeRotations.buffer,
-			g_buffers->shapePrevPositions.buffer,
-			g_buffers->shapePrevRotations.buffer,
-			g_buffers->shapeFlags.buffer,
-			int(g_buffers->shapeFlags.size()));
+	//if (g_shapesChanged)
+	//{
+	//	NvFlexSetShapes(
+	//		g_solver,
+	//		g_buffers->shapeGeometry.buffer,
+	//		g_buffers->shapePositions.buffer,
+	//		g_buffers->shapeRotations.buffer,
+	//		g_buffers->shapePrevPositions.buffer,
+	//		g_buffers->shapePrevRotations.buffer,
+	//		g_buffers->shapeFlags.buffer,
+	//		int(g_buffers->shapeFlags.size()));
 
-		g_shapesChanged = false;
-	}
+	//	g_shapesChanged = false;
+	//}
 
-	if (!g_pause || g_step)
-	{
-		// tick solver
-		NvFlexSetParams(g_solver, &g_params);
-		NvFlexUpdateSolver(g_solver, g_dt, g_numSubsteps, g_profile);
+	//if (!g_pause || g_step)
+	//{
+	//	// tick solver
+	//	NvFlexSetParams(g_solver, &g_params);
+	//	NvFlexUpdateSolver(g_solver, g_dt, g_numSubsteps, g_profile);
 
-		g_frame++;
-		g_step = false;
-	}
+	//	g_frame++;
+	//	g_step = false;
+	//}
 
-	// read back base particle data
-	// Note that flexGet calls don't wait for the GPU, they just queue a GPU copy 
-	// to be executed later.
-	// When we're ready to read the fetched buffers we'll Map them, and that's when
-	// the CPU will wait for the GPU flex update and GPU copy to finish.
-	NvFlexGetParticles(g_solver, g_buffers->positions.buffer, NULL);
-	NvFlexGetVelocities(g_solver, g_buffers->velocities.buffer, NULL);
-	NvFlexGetNormals(g_solver, g_buffers->normals.buffer, NULL);
+	//// read back base particle data
+	//// Note that flexGet calls don't wait for the GPU, they just queue a GPU copy 
+	//// to be executed later.
+	//// When we're ready to read the fetched buffers we'll Map them, and that's when
+	//// the CPU will wait for the GPU flex update and GPU copy to finish.
+	//NvFlexGetParticles(g_solver, g_buffers->positions.buffer, NULL);
+	//NvFlexGetVelocities(g_solver, g_buffers->velocities.buffer, NULL);
+	//NvFlexGetNormals(g_solver, g_buffers->normals.buffer, NULL);
 
-	// readback triangle normals
-	if (g_buffers->triangles.size())
-		NvFlexGetDynamicTriangles(g_solver, g_buffers->triangles.buffer, g_buffers->triangleNormals.buffer, g_buffers->triangles.size() / 3);
+	//// readback triangle normals
+	//if (g_buffers->triangles.size())
+	//	NvFlexGetDynamicTriangles(g_solver, g_buffers->triangles.buffer, g_buffers->triangleNormals.buffer, g_buffers->triangles.size() / 3);
 
-	// readback rigid transforms
-	if (g_buffers->rigidOffsets.size())
-		NvFlexGetRigids(g_solver, NULL, NULL, NULL, NULL, NULL, NULL, NULL, g_buffers->rigidRotations.buffer, g_buffers->rigidTranslations.buffer);
+	//// readback rigid transforms
+	//if (g_buffers->rigidOffsets.size())
+	//	NvFlexGetRigids(g_solver, NULL, NULL, NULL, NULL, NULL, NULL, NULL, g_buffers->rigidRotations.buffer, g_buffers->rigidTranslations.buffer);
 
-	if (!g_interop)
-	{
-		// if not using interop then we read back fluid data to host
-		if (g_drawEllipsoids)
-		{
-			NvFlexGetSmoothParticles(g_solver, g_buffers->smoothPositions.buffer, NULL);
-			NvFlexGetAnisotropy(g_solver, g_buffers->anisotropy1.buffer, g_buffers->anisotropy2.buffer, g_buffers->anisotropy3.buffer, NULL);
-		}
+	//if (!g_interop)
+	//{
+	//	// if not using interop then we read back fluid data to host
+	//	if (g_drawEllipsoids)
+	//	{
+	//		NvFlexGetSmoothParticles(g_solver, g_buffers->smoothPositions.buffer, NULL);
+	//		NvFlexGetAnisotropy(g_solver, g_buffers->anisotropy1.buffer, g_buffers->anisotropy2.buffer, g_buffers->anisotropy3.buffer, NULL);
+	//	}
 
-		// read back diffuse data to host
-		if (g_drawDensity)
-			NvFlexGetDensities(g_solver, g_buffers->densities.buffer, NULL);
+	//	// read back diffuse data to host
+	//	if (g_drawDensity)
+	//		NvFlexGetDensities(g_solver, g_buffers->densities.buffer, NULL);
 
-		if (GetNumDiffuseRenderParticles(g_diffuseRenderBuffers))
-		{
-			NvFlexGetDiffuseParticles(g_solver, g_buffers->diffusePositions.buffer, g_buffers->diffuseVelocities.buffer, g_buffers->diffuseCount.buffer);
-		}
-	}
-	else
-	{
-		// read back just the new diffuse particle count, render buffers will be updated during rendering
-		NvFlexGetDiffuseParticles(g_solver, NULL, NULL, g_buffers->diffuseCount.buffer);
-	}
+	//	if (GetNumDiffuseRenderParticles(g_diffuseRenderBuffers))
+	//	{
+	//		NvFlexGetDiffuseParticles(g_solver, g_buffers->diffusePositions.buffer, g_buffers->diffuseVelocities.buffer, g_buffers->diffuseCount.buffer);
+	//	}
+	//}
+	//else
+	//{
+	//	// read back just the new diffuse particle count, render buffers will be updated during rendering
+	//	NvFlexGetDiffuseParticles(g_solver, NULL, NULL, g_buffers->diffuseCount.buffer);
+	//}
 
 	double updateEndTime = GetSeconds();
 
