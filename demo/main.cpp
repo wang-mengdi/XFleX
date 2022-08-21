@@ -2918,7 +2918,7 @@ int main(int argc, char* argv[])
 	}
 
 	// opening scene
-	g_scenes.push_back(new PotPourri("Pot Pourri"));
+	//g_scenes.push_back(new PotPourri("Pot Pourri"));
 
 	// soft body scenes
 	SoftBody::Instance octopus("../../../../data/softs/octopus.obj");
@@ -3058,90 +3058,90 @@ int main(int argc, char* argv[])
 		plasticStackScene->AddInstance(stackSphere);
 	}
 
-	g_scenes.push_back(softOctopusSceneNew);
-	g_scenes.push_back(softTeapotSceneNew);
-	g_scenes.push_back(softRopeSceneNew);
-	g_scenes.push_back(softClothSceneNew);
-	g_scenes.push_back(softBowlSceneNew);
-	g_scenes.push_back(softRodSceneNew);
-	g_scenes.push_back(softArmadilloSceneNew);
-	g_scenes.push_back(softBunnySceneNew);
+	//g_scenes.push_back(softOctopusSceneNew);
+	//g_scenes.push_back(softTeapotSceneNew);
+	//g_scenes.push_back(softRopeSceneNew);
+	//g_scenes.push_back(softClothSceneNew);
+	//g_scenes.push_back(softBowlSceneNew);
+	//g_scenes.push_back(softRodSceneNew);
+	//g_scenes.push_back(softArmadilloSceneNew);
+	//g_scenes.push_back(softBunnySceneNew);
 
-	g_scenes.push_back(plasticBunniesSceneNew);
-	g_scenes.push_back(plasticComparisonScene);
-	g_scenes.push_back(plasticStackScene);
+	//g_scenes.push_back(plasticBunniesSceneNew);
+	//g_scenes.push_back(plasticComparisonScene);
+	//g_scenes.push_back(plasticStackScene);
 
-	// collision scenes
-	g_scenes.push_back(new FrictionRamp("Friction Ramp"));
-	g_scenes.push_back(new FrictionMovingShape("Friction Moving Box", 0));
-	g_scenes.push_back(new FrictionMovingShape("Friction Moving Sphere", 1));
-	g_scenes.push_back(new FrictionMovingShape("Friction Moving Capsule", 2));
-	g_scenes.push_back(new FrictionMovingShape("Friction Moving Mesh", 3));
-	g_scenes.push_back(new ShapeCollision("Shape Collision"));
-	g_scenes.push_back(new ShapeChannels("Shape Channels"));
-	g_scenes.push_back(new TriangleCollision("Triangle Collision"));
-	g_scenes.push_back(new LocalSpaceFluid("Local Space Fluid"));
-	g_scenes.push_back(new LocalSpaceCloth("Local Space Cloth"));
-	g_scenes.push_back(new CCDFluid("World Space Fluid"));
+	//// collision scenes
+	//g_scenes.push_back(new FrictionRamp("Friction Ramp"));
+	//g_scenes.push_back(new FrictionMovingShape("Friction Moving Box", 0));
+	//g_scenes.push_back(new FrictionMovingShape("Friction Moving Sphere", 1));
+	//g_scenes.push_back(new FrictionMovingShape("Friction Moving Capsule", 2));
+	//g_scenes.push_back(new FrictionMovingShape("Friction Moving Mesh", 3));
+	//g_scenes.push_back(new ShapeCollision("Shape Collision"));
+	//g_scenes.push_back(new ShapeChannels("Shape Channels"));
+	//g_scenes.push_back(new TriangleCollision("Triangle Collision"));
+	//g_scenes.push_back(new LocalSpaceFluid("Local Space Fluid"));
+	//g_scenes.push_back(new LocalSpaceCloth("Local Space Cloth"));
+	//g_scenes.push_back(new CCDFluid("World Space Fluid"));
 
-	// cloth scenes
-	g_scenes.push_back(new EnvironmentalCloth("Env Cloth Small", 6, 6, 40, 16));
-	g_scenes.push_back(new EnvironmentalCloth("Env Cloth Large", 16, 32, 10, 3));
-	g_scenes.push_back(new FlagCloth("Flag Cloth"));
-	g_scenes.push_back(new Inflatable("Inflatables"));
-	g_scenes.push_back(new ClothLayers("Cloth Layers"));
-	g_scenes.push_back(new SphereCloth("Sphere Cloth"));
-	g_scenes.push_back(new Tearing("Tearing"));
-	g_scenes.push_back(new Pasta("Pasta"));
+	//// cloth scenes
+	//g_scenes.push_back(new EnvironmentalCloth("Env Cloth Small", 6, 6, 40, 16));
+	//g_scenes.push_back(new EnvironmentalCloth("Env Cloth Large", 16, 32, 10, 3));
+	//g_scenes.push_back(new FlagCloth("Flag Cloth"));
+	//g_scenes.push_back(new Inflatable("Inflatables"));
+	//g_scenes.push_back(new ClothLayers("Cloth Layers"));
+	//g_scenes.push_back(new SphereCloth("Sphere Cloth"));
+	//g_scenes.push_back(new Tearing("Tearing"));
+	//g_scenes.push_back(new Pasta("Pasta"));
 
-	// game mesh scenes
-	g_scenes.push_back(new GameMesh("Game Mesh Rigid", 0));
-	g_scenes.push_back(new GameMesh("Game Mesh Particles", 1));
-	g_scenes.push_back(new GameMesh("Game Mesh Fluid", 2));
-	g_scenes.push_back(new GameMesh("Game Mesh Cloth", 3));
-	g_scenes.push_back(new RigidDebris("Rigid Debris"));
+	//// game mesh scenes
+	//g_scenes.push_back(new GameMesh("Game Mesh Rigid", 0));
+	//g_scenes.push_back(new GameMesh("Game Mesh Particles", 1));
+	//g_scenes.push_back(new GameMesh("Game Mesh Fluid", 2));
+	//g_scenes.push_back(new GameMesh("Game Mesh Cloth", 3));
+	//g_scenes.push_back(new RigidDebris("Rigid Debris"));
 
-	// viscous fluids
-	g_scenes.push_back(new Viscosity("Viscosity Low", 0.5f));
-	g_scenes.push_back(new Viscosity("Viscosity Med", 3.0f));
-	g_scenes.push_back(new Viscosity("Viscosity High", 5.0f, 0.12f));
-	g_scenes.push_back(new Adhesion("Adhesion"));
-	g_scenes.push_back(new GooGun("Goo Gun", true));
+	//// viscous fluids
+	//g_scenes.push_back(new Viscosity("Viscosity Low", 0.5f));
+	//g_scenes.push_back(new Viscosity("Viscosity Med", 3.0f));
+	//g_scenes.push_back(new Viscosity("Viscosity High", 5.0f, 0.12f));
+	//g_scenes.push_back(new Adhesion("Adhesion"));
+	//g_scenes.push_back(new GooGun("Goo Gun", true));
 
-	// regular fluids
-	g_scenes.push_back(new Buoyancy("Buoyancy"));
-	g_scenes.push_back(new Melting("Melting"));
-	g_scenes.push_back(new SurfaceTension("Surface Tension Low", 0.0f));
-	g_scenes.push_back(new SurfaceTension("Surface Tension Med", 10.0f));
-	g_scenes.push_back(new SurfaceTension("Surface Tension High", 20.0f));
-	g_scenes.push_back(new DamBreak("DamBreak  5cm", 0.05f));
-	g_scenes.push_back(new DamBreak("DamBreak 10cm", 0.1f));
-	g_scenes.push_back(new DamBreak("DamBreak 15cm", 0.15f));
-	g_scenes.push_back(new RockPool("Rock Pool"));
-	g_scenes.push_back(new RayleighTaylor2D("Rayleigh Taylor 2D"));
+	//// regular fluids
+	//g_scenes.push_back(new Buoyancy("Buoyancy"));
+	//g_scenes.push_back(new Melting("Melting"));
+	//g_scenes.push_back(new SurfaceTension("Surface Tension Low", 0.0f));
+	//g_scenes.push_back(new SurfaceTension("Surface Tension Med", 10.0f));
+	//g_scenes.push_back(new SurfaceTension("Surface Tension High", 20.0f));
+	//g_scenes.push_back(new DamBreak("DamBreak  5cm", 0.05f));
+	//g_scenes.push_back(new DamBreak("DamBreak 10cm", 0.1f));
+	//g_scenes.push_back(new DamBreak("DamBreak 15cm", 0.15f));
+	//g_scenes.push_back(new RockPool("Rock Pool"));
+	//g_scenes.push_back(new RayleighTaylor2D("Rayleigh Taylor 2D"));
 
-	// misc feature scenes
-	g_scenes.push_back(new TriggerVolume("Trigger Volume"));
-	g_scenes.push_back(new ForceField("Force Field"));
-	g_scenes.push_back(new InitialOverlap("Initial Overlap"));
+	//// misc feature scenes
+	//g_scenes.push_back(new TriggerVolume("Trigger Volume"));
+	//g_scenes.push_back(new ForceField("Force Field"));
+	//g_scenes.push_back(new InitialOverlap("Initial Overlap"));
 
-	// rigid body scenes
-	g_scenes.push_back(new RigidPile("Rigid2", 2));
-	g_scenes.push_back(new RigidPile("Rigid4", 4));
-	g_scenes.push_back(new RigidPile("Rigid8", 12));
-	g_scenes.push_back(new BananaPile("Bananas"));
-	g_scenes.push_back(new LowDimensionalShapes("Low Dimensional Shapes"));
+	//// rigid body scenes
+	//g_scenes.push_back(new RigidPile("Rigid2", 2));
+	//g_scenes.push_back(new RigidPile("Rigid4", 4));
+	//g_scenes.push_back(new RigidPile("Rigid8", 12));
+	//g_scenes.push_back(new BananaPile("Bananas"));
+	//g_scenes.push_back(new LowDimensionalShapes("Low Dimensional Shapes"));
 
-	// granular scenes
-	g_scenes.push_back(new GranularPile("Granular Pile"));
+	//// granular scenes
+	//g_scenes.push_back(new GranularPile("Granular Pile"));
 
-	// coupling scenes
-	g_scenes.push_back(new ParachutingBunnies("Parachuting Bunnies"));
-	g_scenes.push_back(new WaterBalloon("Water Balloons"));
-	g_scenes.push_back(new RigidFluidCoupling("Rigid Fluid Coupling"));
-	g_scenes.push_back(new FluidBlock("Fluid Block"));
-	g_scenes.push_back(new FluidClothCoupling("Fluid Cloth Coupling Water", false));
-	g_scenes.push_back(new FluidClothCoupling("Fluid Cloth Coupling Goo", true));
+	//// coupling scenes
+	//g_scenes.push_back(new ParachutingBunnies("Parachuting Bunnies"));
+	//g_scenes.push_back(new WaterBalloon("Water Balloons"));
+	//g_scenes.push_back(new RigidFluidCoupling("Rigid Fluid Coupling"));
+	//g_scenes.push_back(new FluidBlock("Fluid Block"));
+	//g_scenes.push_back(new FluidClothCoupling("Fluid Cloth Coupling Water", false));
+	//g_scenes.push_back(new FluidClothCoupling("Fluid Cloth Coupling Goo", true));
 	g_scenes.push_back(new BunnyBath("Bunny Bath Dam", true));
 
 	// init graphics
