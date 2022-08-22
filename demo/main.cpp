@@ -3139,10 +3139,10 @@ int main(int argc, char* argv[])
 	//g_scenes.push_back(new ParachutingBunnies("Parachuting Bunnies"));
 	//g_scenes.push_back(new WaterBalloon("Water Balloons"));
 	//g_scenes.push_back(new RigidFluidCoupling("Rigid Fluid Coupling"));
-	//g_scenes.push_back(new FluidBlock("Fluid Block"));
+	g_scenes.push_back(new FluidBlock("Fluid Block"));
 	//g_scenes.push_back(new FluidClothCoupling("Fluid Cloth Coupling Water", false));
 	//g_scenes.push_back(new FluidClothCoupling("Fluid Cloth Coupling Goo", true));
-	g_scenes.push_back(new BunnyBath("Bunny Bath Dam", true));
+	//g_scenes.push_back(new BunnyBath("Bunny Bath Dam", true));
 
 	// init graphics
 	RenderInitOptions options;
