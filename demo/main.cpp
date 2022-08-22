@@ -1410,12 +1410,13 @@ void RenderScene()
 	for (int i = 0; i != passes; i++)
 	{
 
+		//bounding boxes
 		DrawPlanes((Vec4*)g_params.planes, g_params.numPlanes, g_drawPlaneBias);
 
-		if (g_drawMesh)
-			DrawMesh(g_mesh, g_meshColor);
+		if (g_drawMesh) DrawMesh(g_mesh, g_meshColor);
 
 
+		//solid obstacles
 		DrawShapes();
 
 		if (g_drawCloth && g_buffers->triangles.size())
