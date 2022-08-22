@@ -2461,82 +2461,82 @@ void SDLInit(const char* title)
 	g_windowId = SDL_GetWindowID(g_window);
 }
 
-void SDLMainLoop()
-{
-#if ENABLE_AFTERMATH_SUPPORT
-	__try
-#endif
-	{
-		bool quit = false;
-		SDL_Event e;
-		while (!quit)
-		{
-			UpdateFrame();
-
-			while (SDL_PollEvent(&e))
-			{
-				switch (e.type)
-				{
-				case SDL_QUIT:
-					quit = true;
-					break;
-
-				case SDL_KEYDOWN:
-					if (e.key.keysym.sym < 256 && (e.key.keysym.mod == KMOD_NONE || (e.key.keysym.mod & KMOD_NUM)))
-						quit = InputKeyboardDown(e.key.keysym.sym, 0, 0);
-					InputArrowKeysDown(e.key.keysym.sym, 0, 0);
-					break;
-
-				case SDL_KEYUP:
-					if (e.key.keysym.sym < 256 && (e.key.keysym.mod == 0 || (e.key.keysym.mod & KMOD_NUM)))
-						InputKeyboardUp(e.key.keysym.sym, 0, 0);
-					InputArrowKeysUp(e.key.keysym.sym, 0, 0);
-					break;
-
-				case SDL_MOUSEMOTION:
-					if (e.motion.state)
-						MouseMotionFunc(e.motion.state, e.motion.x, e.motion.y);
-					else
-						MousePassiveMotionFunc(e.motion.x, e.motion.y);
-					break;
-
-				case SDL_MOUSEBUTTONDOWN:
-				case SDL_MOUSEBUTTONUP:
-					MouseFunc(e.button.button, e.button.state, e.motion.x, e.motion.y);
-					break;
-
-				case SDL_WINDOWEVENT:
-					if (e.window.windowID == g_windowId)
-					{
-						if (e.window.event == SDL_WINDOWEVENT_SIZE_CHANGED)
-							ReshapeWindow(e.window.data1, e.window.data2);
-					}
-					break;
-
-				case SDL_WINDOWEVENT_LEAVE:
-					g_camVel = Vec3(0.0f, 0.0f, 0.0f);
-					break;
-
-				case SDL_CONTROLLERBUTTONUP:
-				case SDL_CONTROLLERBUTTONDOWN:
-					ControllerButtonEvent(e.cbutton);
-					break;
-
-				case SDL_JOYDEVICEADDED:
-				case SDL_JOYDEVICEREMOVED:
-					ControllerDeviceUpdate();
-					break;
-				}
-			}
-		}
-	}
-#if ENABLE_AFTERMATH_SUPPORT
-	__except (true)
-	{
-		DumpAftermathData();
-	}
-#endif
-}
+//void SDLMainLoop()
+//{
+//#if ENABLE_AFTERMATH_SUPPORT
+//	__try
+//#endif
+//	{
+//		bool quit = false;
+//		SDL_Event e;
+//		while (!quit)
+//		{
+//			UpdateFrame();
+//
+//			while (SDL_PollEvent(&e))
+//			{
+//				switch (e.type)
+//				{
+//				case SDL_QUIT:
+//					quit = true;
+//					break;
+//
+//				case SDL_KEYDOWN:
+//					if (e.key.keysym.sym < 256 && (e.key.keysym.mod == KMOD_NONE || (e.key.keysym.mod & KMOD_NUM)))
+//						quit = InputKeyboardDown(e.key.keysym.sym, 0, 0);
+//					InputArrowKeysDown(e.key.keysym.sym, 0, 0);
+//					break;
+//
+//				case SDL_KEYUP:
+//					if (e.key.keysym.sym < 256 && (e.key.keysym.mod == 0 || (e.key.keysym.mod & KMOD_NUM)))
+//						InputKeyboardUp(e.key.keysym.sym, 0, 0);
+//					InputArrowKeysUp(e.key.keysym.sym, 0, 0);
+//					break;
+//
+//				case SDL_MOUSEMOTION:
+//					if (e.motion.state)
+//						MouseMotionFunc(e.motion.state, e.motion.x, e.motion.y);
+//					else
+//						MousePassiveMotionFunc(e.motion.x, e.motion.y);
+//					break;
+//
+//				case SDL_MOUSEBUTTONDOWN:
+//				case SDL_MOUSEBUTTONUP:
+//					MouseFunc(e.button.button, e.button.state, e.motion.x, e.motion.y);
+//					break;
+//
+//				case SDL_WINDOWEVENT:
+//					if (e.window.windowID == g_windowId)
+//					{
+//						if (e.window.event == SDL_WINDOWEVENT_SIZE_CHANGED)
+//							ReshapeWindow(e.window.data1, e.window.data2);
+//					}
+//					break;
+//
+//				case SDL_WINDOWEVENT_LEAVE:
+//					g_camVel = Vec3(0.0f, 0.0f, 0.0f);
+//					break;
+//
+//				case SDL_CONTROLLERBUTTONUP:
+//				case SDL_CONTROLLERBUTTONDOWN:
+//					ControllerButtonEvent(e.cbutton);
+//					break;
+//
+//				case SDL_JOYDEVICEADDED:
+//				case SDL_JOYDEVICEREMOVED:
+//					ControllerDeviceUpdate();
+//					break;
+//				}
+//			}
+//		}
+//	}
+//#if ENABLE_AFTERMATH_SUPPORT
+//	__except (true)
+//	{
+//		DumpAftermathData();
+//	}
+//#endif
+//}
 
 int main(int argc, char* argv[])
 {
