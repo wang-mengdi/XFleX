@@ -18,3 +18,4 @@ bin/.build_cache/
 bin/.objs/
 bin/windows/
 bin/linux/
+movies/
