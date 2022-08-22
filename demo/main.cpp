@@ -1880,7 +1880,7 @@ void UpdateFrame()
 		ReadFrame((int*)img.m_data, g_screenWidth, g_screenHeight);
 
 		std::string file_name = "capture/frame" + std::to_string(g_frame) + ".TGA";
-		TgaSave(file_name.c_str(), img);
+		TgaSave(file_name.c_str(), img, false);
 		//fwrite(img.m_data, sizeof(uint32_t) * g_screenWidth * g_screenHeight, 1, g_ffmpeg);
 
 		delete[] img.m_data;
@@ -3033,7 +3033,11 @@ int main(int argc, char* argv[])
 	Init(g_scene);
 	EndGpuWork();
 
-	SDLMainLoop();
+	for (int i = 0; i < 200; i++) {
+		UpdateFrame();
+	}
+
+	//SDLMainLoop();
 
 	if (g_fluidRenderer)
 		DestroyFluidRenderer(g_fluidRenderer);
