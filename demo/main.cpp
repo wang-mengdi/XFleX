@@ -60,6 +60,9 @@
 #include <external/GFSDK_Aftermath_v1.21/include/GFSDK_Aftermath.h>
 #endif
 
+#include <pybind11/pybind11.h>
+namespace py = pybind11;
+
 SDL_Window* g_window;			// window handle
 unsigned int g_windowId;		// window id
 
@@ -3055,3 +3058,7 @@ int main(int argc, char* argv[])
 
 	return 0;
 }
+
+//PYBIND11_MODULE(bindings, m) {
+//	m.def("main", &main);
+//}
