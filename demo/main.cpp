@@ -1246,41 +1246,41 @@ void RenderScene()
 
 	if (numParticles)
 	{
-
 		if (g_interop)
 		{
 			// copy data directly from solver to the renderer buffers
+			//bulk water
 			UpdateFluidRenderBuffers(g_fluidRenderBuffers, g_solver, g_drawEllipsoids, g_drawDensity);
 		}
-		else
-		{
-			// copy particle data to GPU render device
+		//else
+		//{
+		//	// copy particle data to GPU render device
 
-			if (g_drawEllipsoids)
-			{
-				// if fluid surface rendering then update with smooth positions and anisotropy
-				UpdateFluidRenderBuffers(g_fluidRenderBuffers,
-					&g_buffers->smoothPositions[0],
-					(g_drawDensity) ? &g_buffers->densities[0] : (float*)&g_buffers->phases[0],
-					&g_buffers->anisotropy1[0],
-					&g_buffers->anisotropy2[0],
-					&g_buffers->anisotropy3[0],
-					g_buffers->positions.size(),
-					&g_buffers->activeIndices[0],
-					numParticles);
-			}
-			else
-			{
-				// otherwise just send regular positions and no anisotropy
-				UpdateFluidRenderBuffers(g_fluidRenderBuffers,
-					&g_buffers->positions[0],
-					(float*)&g_buffers->phases[0],
-					NULL, NULL, NULL,
-					g_buffers->positions.size(),
-					&g_buffers->activeIndices[0],
-					numParticles);
-			}
-		}
+		//	if (g_drawEllipsoids)
+		//	{
+		//		// if fluid surface rendering then update with smooth positions and anisotropy
+		//		UpdateFluidRenderBuffers(g_fluidRenderBuffers,
+		//			&g_buffers->smoothPositions[0],
+		//			(g_drawDensity) ? &g_buffers->densities[0] : (float*)&g_buffers->phases[0],
+		//			&g_buffers->anisotropy1[0],
+		//			&g_buffers->anisotropy2[0],
+		//			&g_buffers->anisotropy3[0],
+		//			g_buffers->positions.size(),
+		//			&g_buffers->activeIndices[0],
+		//			numParticles);
+		//	}
+		//	else
+		//	{
+		//		// otherwise just send regular positions and no anisotropy
+		//		UpdateFluidRenderBuffers(g_fluidRenderBuffers,
+		//			&g_buffers->positions[0],
+		//			(float*)&g_buffers->phases[0],
+		//			NULL, NULL, NULL,
+		//			g_buffers->positions.size(),
+		//			&g_buffers->activeIndices[0],
+		//			numParticles);
+		//	}
+		//}
 	}
 
 	// GPU Render time doesn't include CPU->GPU copy time
@@ -1291,16 +1291,17 @@ void RenderScene()
 		if (g_interop)
 		{
 			// copy data directly from solver to the renderer buffers
+			//splash foams
 			UpdateDiffuseRenderBuffers(g_diffuseRenderBuffers, g_solver);
 		}
-		else
-		{
-			// copy diffuse particle data from host to GPU render device 
-			UpdateDiffuseRenderBuffers(g_diffuseRenderBuffers,
-				&g_buffers->diffusePositions[0],
-				&g_buffers->diffuseVelocities[0],
-				numDiffuse);
-		}
+		//else
+		//{
+		//	// copy diffuse particle data from host to GPU render device 
+		//	UpdateDiffuseRenderBuffers(g_diffuseRenderBuffers,
+		//		&g_buffers->diffusePositions[0],
+		//		&g_buffers->diffuseVelocities[0],
+		//		numDiffuse);
+		//}
 	}
 
 	//---------------------------------------
@@ -1342,8 +1343,7 @@ void RenderScene()
 	//-------------------------------------
 	// shadowing pass 
 
-	if (g_meshSkinIndices.size())
-		SkinMesh();
+	if (g_meshSkinIndices.size()) SkinMesh();
 
 	// create shadow maps
 	ShadowBegin(g_shadowMap);
@@ -1354,8 +1354,7 @@ void RenderScene()
 	// give scene a chance to do custom drawing
 	g_scenes[g_scene]->Draw(1);
 
-	if (g_drawMesh)
-		DrawMesh(g_mesh, g_meshColor);
+	if (g_drawMesh)	DrawMesh(g_mesh, g_meshColor);
 
 	DrawShapes();
 
@@ -1451,17 +1450,17 @@ void RenderScene()
 		if (g_drawDiffuse)
 			RenderDiffuse(g_fluidRenderer, g_diffuseRenderBuffers, numDiffuse, radius * g_diffuseScale, float(g_screenWidth), aspect, fov, g_diffuseColor, g_lightPos, g_lightTarget, lightTransform, g_shadowMap, g_diffuseMotionScale, g_diffuseInscatter, g_diffuseOutscatter, g_diffuseShadow, true);
 	}
-	else
-	{
-		// draw all particles as spheres
-		if (g_drawPoints)
-		{
-			int offset = g_drawMesh ? g_numSolidParticles : 0;
+	//else
+	//{
+	//	// draw all particles as spheres
+	//	if (g_drawPoints)
+	//	{
+	//		int offset = g_drawMesh ? g_numSolidParticles : 0;
 
-			if (g_buffers->activeIndices.size())
-				DrawPoints(g_fluidRenderBuffers, numParticles - offset, offset, radius, float(g_screenWidth), aspect, fov, g_lightPos, g_lightTarget, lightTransform, g_shadowMap, g_drawDensity);
-		}
-	}
+	//		if (g_buffers->activeIndices.size())
+	//			DrawPoints(g_fluidRenderBuffers, numParticles - offset, offset, radius, float(g_screenWidth), aspect, fov, g_lightPos, g_lightTarget, lightTransform, g_shadowMap, g_drawDensity);
+	//	}
+	//}
 
 	GraphicsTimerEnd();
 }
