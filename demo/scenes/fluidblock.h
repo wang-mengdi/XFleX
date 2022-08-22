@@ -28,8 +28,8 @@ public:
 		AddRandomConvex(12, Vec3(4.6f, ly, 2.0f), minSize, maxSize, Vec3(1.0f, 0.0f, 1.0f), 0.2f + Randf(0.0f, 2.0f*kPi));
 	
 		float size = 0.3f;
-		for (int i=0; i < 32; ++i)
-			CreateParticleShape(GetFilePathByPlatform("../../data/torus.obj").c_str(), Vec3(4.5f, 2.0f + radius*2.0f*i, 1.0f), size, 0.0f, radius*0.5f, Vec3(0.0f, 0.0f, 0.0f), 0.125f, true, 1.0f, NvFlexMakePhase(group++, 0), true, 0.0f);
+		//for (int i=0; i < 32; ++i)
+		//	CreateParticleShape(GetFilePathByPlatform("../../data/torus.obj").c_str(), Vec3(4.5f, 2.0f + radius*2.0f*i, 1.0f), size, 0.0f, radius*0.5f, Vec3(0.0f, 0.0f, 0.0f), 0.125f, true, 1.0f, NvFlexMakePhase(group++, 0), true, 0.0f);
 
 		g_numSolidParticles = g_buffers->positions.size();	
 
