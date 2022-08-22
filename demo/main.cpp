@@ -1868,19 +1868,23 @@ void UpdateFrame()
 		g_mousePos = origin + dir * g_mouseT;
 	}
 
-	if (g_capture)
-	{
+	//if (g_capture)
+	//{
 		TgaImage img;
 		img.m_width = g_screenWidth;
 		img.m_height = g_screenHeight;
 		img.m_data = new uint32_t[g_screenWidth * g_screenHeight];
 
+		
+
 		ReadFrame((int*)img.m_data, g_screenWidth, g_screenHeight);
 
-		fwrite(img.m_data, sizeof(uint32_t) * g_screenWidth * g_screenHeight, 1, g_ffmpeg);
+		std::string file_name = "capture/frame" + std::to_string(g_frame) + ".TGA";
+		TgaSave(file_name.c_str(), img);
+		//fwrite(img.m_data, sizeof(uint32_t) * g_screenWidth * g_screenHeight, 1, g_ffmpeg);
 
 		delete[] img.m_data;
-	}
+	//}
 
 	double renderEndTime = GetSeconds();
 
