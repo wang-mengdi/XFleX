@@ -1,5 +1,4 @@
 add_rules("mode.debug","mode.release")
-add_requires("cuda", {system=true, configs={utils={"cublas","cusparse","cusolver"}}})
 add_requires("libsdl =2.0.8")
 add_requires("pybind11 >=2.10.0")
 includes("../extensions/xmake.lua")
@@ -50,7 +49,6 @@ target("flex-demo")
     add_cuflags("-extended-lambda","-rdc=true")
     add_cuflags("-Xcompiler /bigobj")
     --add_ldflags("/subsystem:console")
-    add_packages("cuda",{public=true})
     add_packages("libsdl",{public=true})
     add_packages("pybind11",{public=true})
     

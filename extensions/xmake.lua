@@ -1,4 +1,5 @@
 add_rules("mode.debug","mode.release")
+add_requires("cuda", {system=true, configs={utils={"cublas","cusparse","cusolver"}}})
 
 target("flex-ext")
     add_rules("plugin.vsxmake.autoupdate")
@@ -19,3 +20,5 @@ target("flex-ext")
     add_cugencodes("native","compute_61")
     add_cuflags("-extended-lambda","-rdc=true")
     add_cuflags("-Xcompiler /bigobj")
+    
+    add_packages("cuda",{public=true})
