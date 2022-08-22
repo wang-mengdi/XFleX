@@ -1702,7 +1702,7 @@ int DoUI()
 {
 	// gui may set a new scene
 	int newScene = -1;
-
+	g_showHelp = false;
 	if (g_showHelp)
 	{
 		const int numParticles = NvFlexGetActiveCount(g_solver);
