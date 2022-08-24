@@ -49,6 +49,7 @@
 
 #include "shaders.h"
 #include "imgui.h"
+#include "opengl/shader.h"
 
 #include "shadersDemoContext.h"
 
@@ -1238,6 +1239,25 @@ void UpdateScene()
 	g_scenes[g_scene]->Update();
 }
 
+void XFlex_Set_Positions(std::vector<float> &positions) {
+	g_buffers->positions.map();
+
+	//auto buf = positions.request();
+	//auto ptr = (float*)buf.ptr;
+	auto ptr = positions.data();
+
+	for (size_t i = 0; i < (size_t)g_buffers->positions.size(); i++) {
+		g_buffers->positions[i].x = ptr[i * 4];
+		g_buffers->positions[i].y = ptr[i * 4 + 1];
+		g_buffers->positions[i].z = ptr[i * 4 + 2];
+		g_buffers->positions[i].w = ptr[i * 4 + 3];
+	}
+
+	g_buffers->positions.unmap();
+
+	NvFlexSetParticles(g_solver, g_buffers->positions.buffer, nullptr);
+}
+
 void RenderScene()
 {
 	const int numParticles = NvFlexGetActiveCount(g_solver);
@@ -1246,6 +1266,8 @@ void RenderScene()
 	//---------------------------------------------------
 	// use VBO buffer wrappers to allow Flex to write directly to the OpenGL buffers
 	// Flex will take care of any CUDA interop mapping/unmapping during the get() operations
+
+
 
 	if (numParticles)
 	{
@@ -1448,7 +1470,7 @@ void RenderScene()
 			DrawPoints(g_fluidRenderBuffers, g_numSolidParticles, 0, radius, float(g_screenWidth), aspect, fov, g_lightPos, g_lightTarget, lightTransform, g_shadowMap, g_drawDensity);
 
 		// render fluid surface
-		RenderEllipsoids(g_fluidRenderer, g_fluidRenderBuffers, numParticles - g_numSolidParticles, g_numSolidParticles, radius, float(g_screenWidth), aspect, fov, g_lightPos, g_lightTarget, lightTransform, g_shadowMap, g_fluidColor, g_blur, g_ior, g_drawOpaque);
+		OGL_Renderer::RenderEllipsoids(g_fluidRenderer, g_fluidRenderBuffers, numParticles - g_numSolidParticles, g_numSolidParticles, radius, float(g_screenWidth), aspect, fov, g_lightPos, g_lightTarget, lightTransform, g_shadowMap, g_fluidColor, g_blur, g_ior, g_drawOpaque);
 
 		// second pass of diffuse particles for particles in front of fluid surface
 		if (g_drawDiffuse)
