@@ -1470,7 +1470,8 @@ void RenderScene()
 			DrawPoints(g_fluidRenderBuffers, g_numSolidParticles, 0, radius, float(g_screenWidth), aspect, fov, g_lightPos, g_lightTarget, lightTransform, g_shadowMap, g_drawDensity);
 
 		// render fluid surface
-		OGL_Renderer::RenderEllipsoidsGL(g_fluidRenderer, g_fluidRenderBuffers, numParticles - g_numSolidParticles, g_numSolidParticles, radius, float(g_screenWidth), aspect, fov, g_lightPos, g_lightTarget, lightTransform, g_shadowMap, g_fluidColor, g_blur, g_ior, g_drawOpaque);
+		FluidRenderBuffersGL* gl_buffers = reinterpret_cast<FluidRenderBuffersGL*>(g_fluidRenderBuffers);
+		OGL_Renderer::RenderEllipsoidsGL(g_fluidRenderer, gl_buffers, numParticles - g_numSolidParticles, g_numSolidParticles, radius, float(g_screenWidth), aspect, fov, g_lightPos, g_lightTarget, lightTransform, g_shadowMap, g_fluidColor, g_blur, g_ior, g_drawOpaque);
 
 		// second pass of diffuse particles for particles in front of fluid surface
 		if (g_drawDiffuse)
