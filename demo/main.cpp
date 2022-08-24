@@ -1272,6 +1272,9 @@ void RenderScene(void)
 	{
 		if (g_interop)
 		{
+
+
+
 			// copy data directly from solver to the renderer buffers
 			//bulk water
 			UpdateFluidRenderBuffers(g_fluidRenderBuffers, g_solver, g_drawEllipsoids, g_drawDensity);
@@ -1739,26 +1742,6 @@ void SDL_EventFunc() {
 void UpdateFrame()
 {
 
-	float vel = 0.1;
-	g_buffers->positions.map();
-
-	g_buffers->positions.resize(0);
-	g_buffers->positions.reserve(64 * 32 * 32);
-	for (int i = 0; i < 64; i++) {
-		for (int j = 0; j < 32; j++) {
-			for (int k = 0; k < 32; k++) {
-				g_buffers->positions.push_back(Vec4(i * 0.05 + vel * (float)g_frame, j * 0.05, k * 0.05, 1.0));
-			}
-		}
-	}
-
-	NvFlexCopyDesc copyDesc;
-	copyDesc.dstOffset = 0;
-	copyDesc.srcOffset = 0;
-	copyDesc.elementCount = g_buffers->positions.size();
-
-	g_buffers->positions.unmap();
-	NvFlexSetParticles(g_solver, g_buffers->positions.buffer, &copyDesc);
 
 	printf("frame %d\n", g_frame);
 
@@ -1790,7 +1773,7 @@ void UpdateFrame()
 		UpdateEmitters();
 		UpdateMouse();
 		UpdateWind();
-		//UpdateScene();
+		UpdateScene();
 	}
 
 	//-------------------------------------------------------------------
@@ -1820,6 +1803,7 @@ void UpdateFrame()
 
 	// If user has disabled async compute, ensure that no compute can overlap
 	// graphics by placing a sync between them
+	g_useAsyncCompute = false;
 	if (!g_useAsyncCompute)
 		NvFlexComputeWaitForGraphics(g_flexLib);
 
@@ -1860,6 +1844,24 @@ void UpdateFrame()
 
 	double updateBeginTime = GetSeconds();
 
+	float vel = 0.01;
+	g_buffers->positions.map();
+	g_buffers->positions.resize(0);
+	g_buffers->positions.reserve(64 * 32 * 32);
+	for (int i = 0; i < 64; i++) {
+		for (int j = 0; j < 32; j++) {
+			for (int k = 0; k < 32; k++) {
+				g_buffers->positions.push_back(Vec4(i * 0.05 + vel * (float)g_frame, j * 0.05, k * 0.05, 1.0));
+			}
+		}
+	}
+	NvFlexCopyDesc myCopyDesc;
+	myCopyDesc.dstOffset = 0;
+	myCopyDesc.srcOffset = 0;
+	myCopyDesc.elementCount = g_buffers->positions.size();
+	g_buffers->positions.unmap();
+	NvFlexSetParticles(g_solver, g_buffers->positions.buffer, &myCopyDesc);
+
 	// send any particle updates to the solver
 	NvFlexSetParticles(g_solver, g_buffers->positions.buffer, nullptr);
 	NvFlexSetVelocities(g_solver, g_buffers->velocities.buffer, nullptr);
@@ -1870,8 +1872,15 @@ void UpdateFrame()
 
 	if (!g_pause || g_step) {
 		// tick solver
-		// NvFlexSetParams(g_solver, &g_params);
-		// NvFlexUpdateSolver(g_solver, g_dt, g_numSubsteps, g_profile);
+		NvFlexSetParams(g_solver, &g_params);
+		//NvFlexUpdateSolver(g_solver, g_dt, g_numSubsteps, g_profile);
+
+
+
+		g_buffers->positions.map();
+		int n_particles = g_buffers->positions.size();
+		g_buffers->positions.unmap();
+		printf("%d particles\n", n_particles);
 
 		g_frame++;
 		g_step = false;
