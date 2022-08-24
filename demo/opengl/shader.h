@@ -83,5 +83,5 @@ namespace OGL_Renderer
 {
 	GLuint CompileProgram(const char *vsource = NULL, const char *fsource = NULL, const char* gsource = NULL);
 	void DrawPlane(const Vec4& p, bool color = true);
-	void RenderEllipsoids(FluidRenderer* render, FluidRenderBuffers* buffersIn, int n, int offset, float radius, float screenWidth, float screenAspect, float fov, Vec3 lightPos, Vec3 lightTarget, Matrix44 lightTransform, ShadowMap* shadowMap, Vec4 color, float blur, float ior, bool debug);
+	void RenderEllipsoidsGL(FluidRenderer* render, FluidRenderBuffers* buffersIn, int n, int offset, float radius, float screenWidth, float screenAspect, float fov, Vec3 lightPos, Vec3 lightTarget, Matrix44 lightTransform, ShadowMap* shadowMap, Vec4 color, float blur, float ior, bool debug);
 }
