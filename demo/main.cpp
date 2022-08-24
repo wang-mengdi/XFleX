@@ -1752,7 +1752,14 @@ void UpdateFrame()
 		}
 	}
 
+	NvFlexCopyDesc copyDesc;
+	copyDesc.dstOffset = 0;
+	copyDesc.srcOffset = 0;
+	copyDesc.elementCount = g_buffers->positions.size();
+
 	g_buffers->positions.unmap();
+	NvFlexSetParticles(g_solver, g_buffers->positions.buffer, &copyDesc);
+
 	printf("frame %d\n", g_frame);
 
 	static double lastTime;
