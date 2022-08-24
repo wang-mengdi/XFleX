@@ -1258,16 +1258,15 @@ void XFlex_Set_Positions(std::vector<float> &positions) {
 	NvFlexSetParticles(g_solver, g_buffers->positions.buffer, nullptr);
 }
 
-void RenderScene()
+void RenderScene(void)
 {
+
 	const int numParticles = NvFlexGetActiveCount(g_solver);
 	const int numDiffuse = g_buffers->diffuseCount[0];
 
 	//---------------------------------------------------
 	// use VBO buffer wrappers to allow Flex to write directly to the OpenGL buffers
 	// Flex will take care of any CUDA interop mapping/unmapping during the get() operations
-
-
 
 	if (numParticles)
 	{
@@ -1277,6 +1276,7 @@ void RenderScene()
 			//bulk water
 			UpdateFluidRenderBuffers(g_fluidRenderBuffers, g_solver, g_drawEllipsoids, g_drawDensity);
 		}
+
 		//else
 		//{
 		//	// copy particle data to GPU render device
@@ -1735,6 +1735,27 @@ int DoUI()
 
 void UpdateFrame()
 {
+
+	float vel = 0.1;
+	NvFlexVector<Vec4> positions(g_flexLib);
+	positions.map();
+	positions.reserve(64 * 32 * 32);
+	for (int i = 0; i < 64; i++) {
+		for (int j = 0; j < 32; j++) {
+			for (int k = 0; k < 32; k++) {
+				positions.push_back(Vec4(i * 0.05 + vel * g_frame, j * 0.05, k * 0.05, 1.0));
+			}
+		}
+	}
+	positions.unmap();
+	NvFlexCopyDesc copyDesc;
+	copyDesc.dstOffset = 0;
+	copyDesc.srcOffset = 0;
+	copyDesc.elementCount = positions.size();
+
+	NvFlexSetParticles(g_solver, positions.buffer, &copyDesc);
+	printf("frame %d\n", g_frame);
+
 	static double lastTime;
 
 	// real elapsed frame time
@@ -1746,85 +1767,6 @@ void UpdateFrame()
 	// do gamepad input polling
 	double currentTime = frameBeginTime;
 	static double lastJoyTime = currentTime;
-
-	if (g_gamecontroller && currentTime - lastJoyTime > g_dt)
-	{
-		lastJoyTime = currentTime;
-
-		int leftStickX = SDL_GameControllerGetAxis(g_gamecontroller, SDL_CONTROLLER_AXIS_LEFTX);
-		int leftStickY = SDL_GameControllerGetAxis(g_gamecontroller, SDL_CONTROLLER_AXIS_LEFTY);
-		int rightStickX = SDL_GameControllerGetAxis(g_gamecontroller, SDL_CONTROLLER_AXIS_RIGHTX);
-		int rightStickY = SDL_GameControllerGetAxis(g_gamecontroller, SDL_CONTROLLER_AXIS_RIGHTY);
-		int leftTrigger = SDL_GameControllerGetAxis(g_gamecontroller, SDL_CONTROLLER_AXIS_TRIGGERLEFT);
-		int rightTrigger = SDL_GameControllerGetAxis(g_gamecontroller, SDL_CONTROLLER_AXIS_TRIGGERRIGHT);
-
-		Vec2 leftStick(joyAxisFilter(leftStickX, 0), joyAxisFilter(leftStickY, 0));
-		Vec2 rightStick(joyAxisFilter(rightStickX, 1), joyAxisFilter(rightStickY, 1));
-		Vec2 trigger(leftTrigger / 32768.0f, rightTrigger / 32768.0f);
-
-		if (leftStick.x != 0.0f || leftStick.y != 0.0f ||
-			rightStick.x != 0.0f || rightStick.y != 0.0f)
-		{
-			// note constant factor to speed up analog control compared to digital because it is more controllable.
-			g_camVel.z = -4 * g_camSpeed * leftStick.y;
-			g_camVel.x = 4 * g_camSpeed * leftStick.x;
-
-			// cam orientation
-			g_camAngle.x -= rightStick.x * 0.05f;
-			g_camAngle.y -= rightStick.y * 0.05f;
-		}
-
-		// Handle left stick motion
-		static bool bLeftStick = false;
-
-		if ((leftStick.x != 0.0f || leftStick.y != 0.0f) && !bLeftStick)
-		{
-			bLeftStick = true;
-		}
-		else if ((leftStick.x == 0.0f && leftStick.y == 0.0f) && bLeftStick)
-		{
-			bLeftStick = false;
-			g_camVel.z = -4 * g_camSpeed * leftStick.y;
-			g_camVel.x = 4 * g_camSpeed * leftStick.x;
-		}
-
-		// Handle triggers as controller button events
-		void ControllerButtonEvent(SDL_ControllerButtonEvent event);
-
-		static bool bLeftTrigger = false;
-		static bool bRightTrigger = false;
-		SDL_ControllerButtonEvent e;
-
-		if (!bLeftTrigger && trigger.x > 0.0f)
-		{
-			e.type = SDL_CONTROLLERBUTTONDOWN;
-			e.button = SDL_CONTROLLER_BUTTON_LEFT_TRIGGER;
-			ControllerButtonEvent(e);
-			bLeftTrigger = true;
-		}
-		else if (bLeftTrigger && trigger.x == 0.0f)
-		{
-			e.type = SDL_CONTROLLERBUTTONUP;
-			e.button = SDL_CONTROLLER_BUTTON_LEFT_TRIGGER;
-			ControllerButtonEvent(e);
-			bLeftTrigger = false;
-		}
-
-		if (!bRightTrigger && trigger.y > 0.0f)
-		{
-			e.type = SDL_CONTROLLERBUTTONDOWN;
-			e.button = SDL_CONTROLLER_BUTTON_RIGHT_TRIGGER;
-			ControllerButtonEvent(e);
-			bRightTrigger = true;
-		}
-		else if (bRightTrigger && trigger.y == 0.0f)
-		{
-			e.type = SDL_CONTROLLERBUTTONDOWN;
-			e.button = SDL_CONTROLLER_BUTTON_RIGHT_TRIGGER;
-			ControllerButtonEvent(e);
-			bRightTrigger = false;
-		}
-	}
 
 	//-------------------------------------------------------------------
 	// Scene Update
@@ -1847,7 +1789,7 @@ void UpdateFrame()
 		UpdateEmitters();
 		UpdateMouse();
 		UpdateWind();
-		UpdateScene();
+		//UpdateScene();
 	}
 
 	//-------------------------------------------------------------------
@@ -1935,28 +1877,28 @@ void UpdateFrame()
 	NvFlexSetActiveCount(g_solver, g_buffers->activeIndices.size());
 
 	// allow scene to update constraints etc
-	SyncScene();
+	//SyncScene();
 
-	if (g_shapesChanged)
-	{
-		NvFlexSetShapes(
-			g_solver,
-			g_buffers->shapeGeometry.buffer,
-			g_buffers->shapePositions.buffer,
-			g_buffers->shapeRotations.buffer,
-			g_buffers->shapePrevPositions.buffer,
-			g_buffers->shapePrevRotations.buffer,
-			g_buffers->shapeFlags.buffer,
-			int(g_buffers->shapeFlags.size()));
+	//if (g_shapesChanged)
+	//{
+	//	NvFlexSetShapes(
+	//		g_solver,
+	//		g_buffers->shapeGeometry.buffer,
+	//		g_buffers->shapePositions.buffer,
+	//		g_buffers->shapeRotations.buffer,
+	//		g_buffers->shapePrevPositions.buffer,
+	//		g_buffers->shapePrevRotations.buffer,
+	//		g_buffers->shapeFlags.buffer,
+	//		int(g_buffers->shapeFlags.size()));
 
-		g_shapesChanged = false;
-	}
+	//	g_shapesChanged = false;
+	//}
 
 	if (!g_pause || g_step)
 	{
 		// tick solver
-		NvFlexSetParams(g_solver, &g_params);
-		NvFlexUpdateSolver(g_solver, g_dt, g_numSubsteps, g_profile);
+		//NvFlexSetParams(g_solver, &g_params);
+		//NvFlexUpdateSolver(g_solver, g_dt, g_numSubsteps, g_profile);
 
 		g_frame++;
 		g_step = false;
@@ -1971,37 +1913,37 @@ void UpdateFrame()
 	NvFlexGetVelocities(g_solver, g_buffers->velocities.buffer, NULL);
 	NvFlexGetNormals(g_solver, g_buffers->normals.buffer, NULL);
 
-	// readback triangle normals
-	if (g_buffers->triangles.size())
-		NvFlexGetDynamicTriangles(g_solver, g_buffers->triangles.buffer, g_buffers->triangleNormals.buffer, g_buffers->triangles.size() / 3);
+	//// readback triangle normals
+	//if (g_buffers->triangles.size())
+	//	NvFlexGetDynamicTriangles(g_solver, g_buffers->triangles.buffer, g_buffers->triangleNormals.buffer, g_buffers->triangles.size() / 3);
 
-	// readback rigid transforms
-	if (g_buffers->rigidOffsets.size())
-		NvFlexGetRigids(g_solver, NULL, NULL, NULL, NULL, NULL, NULL, NULL, g_buffers->rigidRotations.buffer, g_buffers->rigidTranslations.buffer);
+	//// readback rigid transforms
+	//if (g_buffers->rigidOffsets.size())
+	//	NvFlexGetRigids(g_solver, NULL, NULL, NULL, NULL, NULL, NULL, NULL, g_buffers->rigidRotations.buffer, g_buffers->rigidTranslations.buffer);
 
-	if (!g_interop)
-	{
-		// if not using interop then we read back fluid data to host
-		if (g_drawEllipsoids)
-		{
-			NvFlexGetSmoothParticles(g_solver, g_buffers->smoothPositions.buffer, NULL);
-			NvFlexGetAnisotropy(g_solver, g_buffers->anisotropy1.buffer, g_buffers->anisotropy2.buffer, g_buffers->anisotropy3.buffer, NULL);
-		}
+	//if (!g_interop)
+	//{
+	//	// if not using interop then we read back fluid data to host
+	//	if (g_drawEllipsoids)
+	//	{
+	//		NvFlexGetSmoothParticles(g_solver, g_buffers->smoothPositions.buffer, NULL);
+	//		NvFlexGetAnisotropy(g_solver, g_buffers->anisotropy1.buffer, g_buffers->anisotropy2.buffer, g_buffers->anisotropy3.buffer, NULL);
+	//	}
 
-		// read back diffuse data to host
-		if (g_drawDensity)
-			NvFlexGetDensities(g_solver, g_buffers->densities.buffer, NULL);
+	//	// read back diffuse data to host
+	//	if (g_drawDensity)
+	//		NvFlexGetDensities(g_solver, g_buffers->densities.buffer, NULL);
 
-		if (GetNumDiffuseRenderParticles(g_diffuseRenderBuffers))
-		{
-			NvFlexGetDiffuseParticles(g_solver, g_buffers->diffusePositions.buffer, g_buffers->diffuseVelocities.buffer, g_buffers->diffuseCount.buffer);
-		}
-	}
-	else
-	{
-		// read back just the new diffuse particle count, render buffers will be updated during rendering
-		NvFlexGetDiffuseParticles(g_solver, NULL, NULL, g_buffers->diffuseCount.buffer);
-	}
+	//	if (GetNumDiffuseRenderParticles(g_diffuseRenderBuffers))
+	//	{
+	//		NvFlexGetDiffuseParticles(g_solver, g_buffers->diffusePositions.buffer, g_buffers->diffuseVelocities.buffer, g_buffers->diffuseCount.buffer);
+	//	}
+	//}
+	//else
+	//{
+	//	// read back just the new diffuse particle count, render buffers will be updated during rendering
+	//	NvFlexGetDiffuseParticles(g_solver, NULL, NULL, g_buffers->diffuseCount.buffer);
+	//}
 
 	double updateEndTime = GetSeconds();
 
