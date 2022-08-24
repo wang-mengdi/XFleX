@@ -1733,27 +1733,26 @@ int DoUI()
 	return newScene;
 }
 
+void SDL_EventFunc() {
+}
+
 void UpdateFrame()
 {
 
 	float vel = 0.1;
-	NvFlexVector<Vec4> positions(g_flexLib);
-	positions.map();
-	positions.reserve(64 * 32 * 32);
+	g_buffers->positions.map();
+
+	g_buffers->positions.resize(0);
+	g_buffers->positions.reserve(64 * 32 * 32);
 	for (int i = 0; i < 64; i++) {
 		for (int j = 0; j < 32; j++) {
 			for (int k = 0; k < 32; k++) {
-				positions.push_back(Vec4(i * 0.05 + vel * g_frame, j * 0.05, k * 0.05, 1.0));
+				g_buffers->positions.push_back(Vec4(i * 0.05 + vel * (float)g_frame, j * 0.05, k * 0.05, 1.0));
 			}
 		}
 	}
-	positions.unmap();
-	NvFlexCopyDesc copyDesc;
-	copyDesc.dstOffset = 0;
-	copyDesc.srcOffset = 0;
-	copyDesc.elementCount = positions.size();
 
-	NvFlexSetParticles(g_solver, positions.buffer, &copyDesc);
+	g_buffers->positions.unmap();
 	printf("frame %d\n", g_frame);
 
 	static double lastTime;
@@ -1763,10 +1762,6 @@ void UpdateFrame()
 
 	g_realdt = float(frameBeginTime - lastTime);
 	lastTime = frameBeginTime;
-
-	// do gamepad input polling
-	double currentTime = frameBeginTime;
-	static double lastJoyTime = currentTime;
 
 	//-------------------------------------------------------------------
 	// Scene Update
@@ -1784,8 +1779,7 @@ void UpdateFrame()
 
 	UpdateCamera();
 
-	if (!g_pause || g_step)
-	{
+	if (!g_pause || g_step) {
 		UpdateEmitters();
 		UpdateMouse();
 		UpdateWind();
@@ -1797,14 +1791,11 @@ void UpdateFrame()
 
 	double renderBeginTime = GetSeconds();
 
-	if (g_profile && (!g_pause || g_step))
-	{
-		if (g_benchmark)
-		{
+	if (g_profile && (!g_pause || g_step)) {
+		if (g_benchmark) {
 			g_numDetailTimers = NvFlexGetDetailTimers(g_solver, &g_detailTimers);
 		}
-		else
-		{
+		else {
 			memset(&g_timers, 0, sizeof(g_timers));
 			NvFlexGetTimers(g_solver, &g_timers);
 		}
@@ -1820,46 +1811,40 @@ void UpdateFrame()
 
 	EndFrame();
 
-	// If user has disabled async compute, ensure that no compute can overlap 
-	// graphics by placing a sync between them	
+	// If user has disabled async compute, ensure that no compute can overlap
+	// graphics by placing a sync between them
 	if (!g_useAsyncCompute)
 		NvFlexComputeWaitForGraphics(g_flexLib);
 
 	UnmapBuffers(g_buffers);
 
 	// move mouse particle (must be done here as GetViewRay() uses the GL projection state)
-	if (g_mouseParticle != -1)
-	{
+	if (g_mouseParticle != -1) {
 		Vec3 origin, dir;
 		GetViewRay(g_lastx, g_screenHeight - g_lasty, origin, dir);
 
 		g_mousePos = origin + dir * g_mouseT;
 	}
 
-	//if (g_capture)
-	//{
+	if (g_capture) {
 		TgaImage img;
 		img.m_width = g_screenWidth;
 		img.m_height = g_screenHeight;
 		img.m_data = new uint32_t[g_screenWidth * g_screenHeight];
 
-		
-
 		ReadFrame((int*)img.m_data, g_screenWidth, g_screenHeight);
+		TgaSave(g_ffmpeg, img, false);
 
-		std::string file_name = "capture/frame" + std::to_string(g_frame) + ".TGA";
-		TgaSave(file_name.c_str(), img, false);
-		//fwrite(img.m_data, sizeof(uint32_t) * g_screenWidth * g_screenHeight, 1, g_ffmpeg);
+		// fwrite(img.m_data, sizeof(uint32_t)*g_screenWidth*g_screenHeight, 1, g_ffmpeg);
 
 		delete[] img.m_data;
-	//}
+	}
 
 	double renderEndTime = GetSeconds();
 
 	// if user requested a scene reset process it now
-	if (g_resetScene)
-	{
-		Reset();
+	if (g_resetScene) {
+		// Reset();
 		g_resetScene = false;
 	}
 
@@ -1869,90 +1854,43 @@ void UpdateFrame()
 	double updateBeginTime = GetSeconds();
 
 	// send any particle updates to the solver
-	NvFlexSetParticles(g_solver, g_buffers->positions.buffer, NULL);
-	NvFlexSetVelocities(g_solver, g_buffers->velocities.buffer, NULL);
-	NvFlexSetPhases(g_solver, g_buffers->phases.buffer, NULL);
-	NvFlexSetActive(g_solver, g_buffers->activeIndices.buffer, NULL);
+	NvFlexSetParticles(g_solver, g_buffers->positions.buffer, nullptr);
+	NvFlexSetVelocities(g_solver, g_buffers->velocities.buffer, nullptr);
+	NvFlexSetPhases(g_solver, g_buffers->phases.buffer, nullptr);
+	NvFlexSetActive(g_solver, g_buffers->activeIndices.buffer, nullptr);
 
 	NvFlexSetActiveCount(g_solver, g_buffers->activeIndices.size());
 
-	// allow scene to update constraints etc
-	//SyncScene();
-
-	//if (g_shapesChanged)
-	//{
-	//	NvFlexSetShapes(
-	//		g_solver,
-	//		g_buffers->shapeGeometry.buffer,
-	//		g_buffers->shapePositions.buffer,
-	//		g_buffers->shapeRotations.buffer,
-	//		g_buffers->shapePrevPositions.buffer,
-	//		g_buffers->shapePrevRotations.buffer,
-	//		g_buffers->shapeFlags.buffer,
-	//		int(g_buffers->shapeFlags.size()));
-
-	//	g_shapesChanged = false;
-	//}
-
-	if (!g_pause || g_step)
-	{
+	if (!g_pause || g_step) {
 		// tick solver
-		//NvFlexSetParams(g_solver, &g_params);
-		//NvFlexUpdateSolver(g_solver, g_dt, g_numSubsteps, g_profile);
+		// NvFlexSetParams(g_solver, &g_params);
+		// NvFlexUpdateSolver(g_solver, g_dt, g_numSubsteps, g_profile);
 
 		g_frame++;
 		g_step = false;
 	}
 
 	// read back base particle data
-	// Note that flexGet calls don't wait for the GPU, they just queue a GPU copy 
+	// Note that flexGet calls don't wait for the GPU, they just queue a GPU copy
 	// to be executed later.
 	// When we're ready to read the fetched buffers we'll Map them, and that's when
 	// the CPU will wait for the GPU flex update and GPU copy to finish.
-	NvFlexGetParticles(g_solver, g_buffers->positions.buffer, NULL);
-	NvFlexGetVelocities(g_solver, g_buffers->velocities.buffer, NULL);
-	NvFlexGetNormals(g_solver, g_buffers->normals.buffer, NULL);
+	NvFlexGetParticles(g_solver, g_buffers->positions.buffer, nullptr);
+	NvFlexGetVelocities(g_solver, g_buffers->velocities.buffer, nullptr);
+	NvFlexGetNormals(g_solver, g_buffers->normals.buffer, nullptr);
 
-	//// readback triangle normals
-	//if (g_buffers->triangles.size())
-	//	NvFlexGetDynamicTriangles(g_solver, g_buffers->triangles.buffer, g_buffers->triangleNormals.buffer, g_buffers->triangles.size() / 3);
-
-	//// readback rigid transforms
-	//if (g_buffers->rigidOffsets.size())
-	//	NvFlexGetRigids(g_solver, NULL, NULL, NULL, NULL, NULL, NULL, NULL, g_buffers->rigidRotations.buffer, g_buffers->rigidTranslations.buffer);
-
-	//if (!g_interop)
-	//{
-	//	// if not using interop then we read back fluid data to host
-	//	if (g_drawEllipsoids)
-	//	{
-	//		NvFlexGetSmoothParticles(g_solver, g_buffers->smoothPositions.buffer, NULL);
-	//		NvFlexGetAnisotropy(g_solver, g_buffers->anisotropy1.buffer, g_buffers->anisotropy2.buffer, g_buffers->anisotropy3.buffer, NULL);
-	//	}
-
-	//	// read back diffuse data to host
-	//	if (g_drawDensity)
-	//		NvFlexGetDensities(g_solver, g_buffers->densities.buffer, NULL);
-
-	//	if (GetNumDiffuseRenderParticles(g_diffuseRenderBuffers))
-	//	{
-	//		NvFlexGetDiffuseParticles(g_solver, g_buffers->diffusePositions.buffer, g_buffers->diffuseVelocities.buffer, g_buffers->diffuseCount.buffer);
-	//	}
-	//}
-	//else
-	//{
-	//	// read back just the new diffuse particle count, render buffers will be updated during rendering
-	//	NvFlexGetDiffuseParticles(g_solver, NULL, NULL, g_buffers->diffuseCount.buffer);
-	//}
+	// readback rigid transforms
+	// if (g_buffers->rigidOffsets.size())
+	//    NvFlexGetRigids(g_solver, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, g_buffers->rigidRotations.buffer, g_buffers->rigidTranslations.buffer);
 
 	double updateEndTime = GetSeconds();
 
 	//-------------------------------------------------------
 	// Update the on-screen timers
 
-	float newUpdateTime = float(updateEndTime - updateBeginTime);
-	float newRenderTime = float(renderEndTime - renderBeginTime);
-	float newWaitTime = float(waitBeginTime - waitEndTime);
+	auto newUpdateTime = float(updateEndTime - updateBeginTime);
+	auto newRenderTime = float(renderEndTime - renderBeginTime);
+	auto newWaitTime = float(waitBeginTime - waitEndTime);
 
 	// Exponential filter to make the display easier to read
 	const float timerSmoothing = 0.05f;
@@ -1969,11 +1907,12 @@ void UpdateFrame()
 	PresentFrame(g_vsync);
 
 	// if gui or benchmark requested a scene change process it now
-	if (newScene != -1)
-	{
+	if (newScene != -1) {
 		g_scene = newScene;
-		Init(g_scene);
+		// Init(g_scene);
 	}
+
+	SDL_EventFunc();
 }
 
 #if ENABLE_AFTERMATH_SUPPORT
